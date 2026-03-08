@@ -1,0 +1,216 @@
+"""
+evaluation.py
+-------------
+Heuristic evaluation function for the chess AI.
+
+The AI cannot search the entire game tree (too large), so when it reaches
+the maximum search depth it calls evaluate() to estimate how good the
+current board position is.
+
+Return value convention:
+  Positive  → White is better
+  Negative  → Black is better
+  0         → Equal / draw
+
+The score is made up of two parts for every piece on the board:
+  1. Material value  — how much the piece is worth (e.g. queen = 900)
+  2. Positional bonus — how good the square is for that piece type
+                        (piece-square tables, one per piece type)
+"""
+import chess
+
+# ---------------------------------------------------------------------------
+# Material values (in centipawns — 100 centipawns = 1 pawn)
+# These reflect the standard chess piece values used in competitive play.
+# The king is given a very high value so the AI never willingly loses it.
+# ---------------------------------------------------------------------------
+PIECE_VALUES = {
+   chess.PAWN:   100,
+   chess.KNIGHT: 320,
+   chess.BISHOP: 330,
+   chess.ROOK:   500,
+   chess.QUEEN:  900,
+   chess.KING:   20000
+}
+
+# ---------------------------------------------------------------------------
+# Piece-square tables
+# Each table is a list of 64 values, one per board square.
+# The table is written from White's perspective with rank 8 at the top
+# (index 0 = a8) and rank 1 at the bottom (index 63 = h1).
+# Positive values reward the piece for being on that square;
+# negative values penalise it.
+# ---------------------------------------------------------------------------
+
+# Pawns: rewarded for advancing toward promotion and controlling the centre.
+# Penalised for blocking the centre (e.g. f/g pawns on rank 2).
+PAWN_TABLE = [
+     0,  0,  0,  0,  0,  0,  0,  0,
+    50, 50, 50, 50, 50, 50, 50, 50,
+    10, 10, 20, 30, 30, 20, 10, 10,
+     5,  5, 10, 25, 25, 10,  5,  5,
+     0,  0,  0, 20, 20,  0,  0,  0,
+     5, -5,-10,  0,  0,-10, -5,  5,
+     5, 10, 10,-20,-20, 10, 10,  5,
+     0,  0,  0,  0,  0,  0,  0,  0
+]
+
+# Knights: strongly penalised on edges and corners ("a knight on the rim
+# is dim"). Best placed in the centre where they control up to 8 squares.
+KNIGHT_TABLE = [
+    -50,-40,-30,-30,-30,-30,-40,-50,
+    -40,-20,  0,  0,  0,  0,-20,-40,
+    -30,  0, 10, 15, 15, 10,  0,-30,
+    -30,  5, 15, 20, 20, 15,  5,-30,
+    -30,  0, 15, 20, 20, 15,  0,-30,
+    -30,  5, 10, 15, 15, 10,  5,-30,
+    -40,-20,  0,  5,  5,  0,-20,-40,
+    -50,-40,-30,-30,-30,-30,-40,-50
+]
+
+# Bishops: rewarded for open diagonals through the centre.
+# Penalised on back rank and corners where diagonals are short.
+BISHOP_TABLE = [
+    -20,-10,-10,-10,-10,-10,-10,-20,
+    -10,  0,  0,  0,  0,  0,  0,-10,
+    -10,  0,  5, 10, 10,  5,  0,-10,
+    -10,  5,  5, 10, 10,  5,  5,-10,
+    -10,  0, 10, 10, 10, 10,  0,-10,
+    -10, 10, 10, 10, 10, 10, 10,-10,
+    -10,  5,  0,  0,  0,  0,  5,-10,
+    -20,-10,-10,-10,-10,-10,-10,-20
+]
+
+# Rooks: rewarded for the 7th rank (attacks enemy pawns) and open files.
+# Penalised on passive squares away from open files.
+ROOK_TABLE = [
+     0,  0,  0,  0,  0,  0,  0,  0,
+     5, 10, 10, 10, 10, 10, 10,  5,
+    -5,  0,  0,  0,  0,  0,  0, -5,
+    -5,  0,  0,  0,  0,  0,  0, -5,
+    -5,  0,  0,  0,  0,  0,  0, -5,
+    -5,  0,  0,  0,  0,  0,  0, -5,
+    -5,  0,  0,  0,  0,  0,  0, -5,
+     0,  0,  0,  5,  5,  0,  0,  0
+]
+
+# Queen: slightly penalised early (discourages premature queen development).
+# Modest central bonuses — the queen is powerful anywhere, not just centre.
+QUEEN_TABLE = [
+    -20,-10,-10, -5, -5,-10,-10,-20,
+    -10,  0,  0,  0,  0,  0,  0,-10,
+    -10,  0,  5,  5,  5,  5,  0,-10,
+     -5,  0,  5,  5,  5,  5,  0, -5,
+      0,  0,  5,  5,  5,  5,  0, -5,
+    -10,  5,  5,  5,  5,  5,  0,-10,
+    -10,  0,  5,  0,  0,  0,  0,-10,
+    -20,-10,-10, -5, -5,-10,-10,-20
+]
+
+# King: strongly penalised in the centre (dangerous in middlegame).
+# Rewarded for castled positions (g1/c1 area) where it is safely tucked away.
+KING_TABLE = [
+    -30,-40,-40,-50,-50,-40,-40,-30,
+    -30,-40,-40,-50,-50,-40,-40,-30,
+    -30,-40,-40,-50,-50,-40,-40,-30,
+    -30,-40,-40,-50,-50,-40,-40,-30,
+    -20,-30,-30,-40,-40,-30,-30,-20,
+    -10,-20,-20,-20,-20,-20,-20,-10,
+     20, 20,  0,  0,  0,  0, 20, 20,
+     30, 40, 10,  0,  0, 10, 40, 30
+]
+
+# Map each piece type constant to its piece-square table.
+TABLES = {
+    chess.PAWN:   PAWN_TABLE,
+    chess.KNIGHT: KNIGHT_TABLE,
+    chess.BISHOP: BISHOP_TABLE,
+    chess.ROOK:   ROOK_TABLE,
+    chess.QUEEN:  QUEEN_TABLE,
+    chess.KING:   KING_TABLE
+}
+
+def get_table_index(square, color):
+    """
+    Convert a board square to the correct index into a piece-square table.
+
+    The tables are written from White's perspective (rank 8 at index 0).
+    - For White pieces: we flip the rank so that rank 8 → row 0 of the table.
+    - For Black pieces: the table is used as-is (rank 1 → row 0), which
+      mirrors the layout so Black's bonuses are symmetrical to White's.
+
+    Args:
+        square: chess.Square (0 = a1 … 63 = h8)
+        color:  chess.WHITE or chess.BLACK
+
+    Returns:
+        Integer index in [0, 63] into the piece-square table.
+    """
+    rank = chess.square_rank(square)   # 0 (rank 1) … 7 (rank 8)
+    file = chess.square_file(square)   # 0 (a-file) … 7 (h-file)
+    if color == chess.WHITE:
+        # Flip vertically: rank 7 (rank 8) becomes row 0 of the table
+        return (7 - rank) * 8 + file
+    else:
+        # No flip needed: rank 0 (rank 1) is already row 0 for Black
+        return rank * 8 + file
+
+def evaluate(board):
+    """
+    Heuristic evaluation of the board position from White's perspective.
+
+    Algorithm:
+      1. Check for terminal states (checkmate / draw) and return
+         extreme or zero scores immediately — no need to sum pieces.
+      2. Loop over every occupied square.
+      3. For each piece, add its material value plus its positional bonus
+         (looked up in the piece-square table for its colour).
+      4. Add the combined value to the score for White, subtract for Black.
+
+    The result is used by the Minimax search when it hits the depth limit:
+    a higher score means a better position for White (the maximising player).
+
+    Args:
+        board: chess.Board — the current game state
+
+    Returns:
+        Integer score in centipawns.
+          > 0  White is ahead
+          < 0  Black is ahead
+            0  Equal position (or forced draw)
+    """
+    # Terminal state checks — return before iterating over pieces
+    if board.is_checkmate():
+        # The side whose turn it is has been mated → they lose
+        return -100000 if board.turn else 100000
+    if board.is_stalemate() or board.is_insufficient_material():
+        return 0   # draw
+
+    score = 0
+    for square in chess.SQUARES:
+        piece = board.piece_at(square)
+        if piece is None:
+            continue   # empty square — skip
+
+        # Material value (e.g. 100 for a pawn, 900 for a queen)
+        value = PIECE_VALUES[piece.piece_type]
+
+        # Positional bonus from the piece-square table
+        # (positive = good square, negative = bad square for this piece)
+        index = get_table_index(square, piece.color)
+        positional = TABLES[piece.piece_type][index]
+
+        # Accumulate score: White adds, Black subtracts
+        if piece.color == chess.WHITE:
+            score += value + positional
+        else:
+            score -= value + positional
+
+    return score
+
+if __name__ == "__main__":
+    board = chess.Board()
+    print(evaluate(board))          # Should print 0 (perfectly symmetric start)
+
+    board2 = chess.Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKB1R w KQkq - 0 1")
+    print(evaluate(board2))         # White is missing a rook → expect negative score
