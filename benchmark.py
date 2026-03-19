@@ -29,15 +29,16 @@ OUTPUT
 import chess
 import matplotlib.pyplot as plt
 from search import get_best_move, get_best_move_no_pruning
+from openings import OPENING_POSITIONS
 
 # ---------------------------------------------------------------------------
 # Test positions (FEN strings)
 # Three positions give a more representative average than a single position.
 # ---------------------------------------------------------------------------
 POSITIONS = [
-    chess.Board(),                                                                          # starting position
-    chess.Board("r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"), # Italian opening
-    chess.Board("r3k2r/ppp2ppp/2nqbn2/3pp3/3PP3/2NQBN2/PPP2PPP/R3K2R w KQkq - 0 1"),    # mid-game
+    chess.Board(),                            # starting position
+    chess.Board(OPENING_POSITIONS[0][1]),     # Italian Game (from openings.py)
+    chess.Board(OPENING_POSITIONS[1][1]),     # Queen's Gambit Declined (from openings.py)
 ]
 
 # Search depths to test (depth 5 excluded for pure Minimax — too slow)
