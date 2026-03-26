@@ -130,30 +130,29 @@ TABLES = {
     chess.KING:   KING_TABLE
 }
 
-def get_table_index(square, color):
-    """
-    Convert a board square to the correct index into a piece-square table.
+PIECE_TYPES = (
+    chess.PAWN,
+    chess.KNIGHT,
+    chess.BISHOP,
+    chess.ROOK,
+    chess.QUEEN,
+    chess.KING,
+)
 
-    The tables are written from White's perspective (rank 8 at index 0).
-    - For White pieces: we flip the rank so that rank 8 → row 0 of the table.
-    - For Black pieces: the table is used as-is (rank 1 → row 0), which
-      mirrors the layout so Black's bonuses are symmetrical to White's.
-
-    Args:
-        square: chess.Square (0 = a1 … 63 = h8)
-        color:  chess.WHITE or chess.BLACK
-
-    Returns:
-        Integer index in [0, 63] into the piece-square table.
-    """
-    rank = chess.square_rank(square)   # 0 (rank 1) … 7 (rank 8)
-    file = chess.square_file(square)   # 0 (a-file) … 7 (h-file)
-    if color == chess.WHITE:
-        # Flip vertically: rank 7 (rank 8) becomes row 0 of the table
-        return (7 - rank) * 8 + file
-    else:
-        # No flip needed: rank 0 (rank 1) is already row 0 for Black
-        return rank * 8 + file
+WHITE_SCORES = {
+    piece_type: tuple(
+        PIECE_VALUES[piece_type] + TABLES[piece_type][chess.square_mirror(square)]
+        for square in chess.SQUARES
+    )
+    for piece_type in PIECE_TYPES
+}
+BLACK_SCORES = {
+    piece_type: tuple(
+        PIECE_VALUES[piece_type] + TABLES[piece_type][square]
+        for square in chess.SQUARES
+    )
+    for piece_type in PIECE_TYPES
+}
 
 def evaluate(board):
     """
@@ -179,32 +178,24 @@ def evaluate(board):
           < 0  Black is ahead
             0  Equal position (or forced draw)
     """
-    # Terminal state checks — return before iterating over pieces
     if board.is_checkmate():
-        # The side whose turn it is has been mated → they lose
         return -100000 if board.turn else 100000
     if board.is_stalemate() or board.is_insufficient_material():
-        return 0   # draw
+        return 0
 
     score = 0
-    for square in chess.SQUARES:
-        piece = board.piece_at(square)
-        if piece is None:
-            continue   # empty square — skip
+    white_scores = WHITE_SCORES
+    black_scores = BLACK_SCORES
 
-        # Material value (e.g. 100 for a pawn, 900 for a queen)
-        value = PIECE_VALUES[piece.piece_type]
+    for piece_type in PIECE_TYPES:
+        white_piece_scores = white_scores[piece_type]
+        black_piece_scores = black_scores[piece_type]
 
-        # Positional bonus from the piece-square table
-        # (positive = good square, negative = bad square for this piece)
-        index = get_table_index(square, piece.color)
-        positional = TABLES[piece.piece_type][index]
+        for square in board.pieces(piece_type, chess.WHITE):
+            score += white_piece_scores[square]
 
-        # Accumulate score: White adds, Black subtracts
-        if piece.color == chess.WHITE:
-            score += value + positional
-        else:
-            score -= value + positional
+        for square in board.pieces(piece_type, chess.BLACK):
+            score -= black_piece_scores[square]
 
     return score
 

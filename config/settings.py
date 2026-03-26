@@ -20,6 +20,7 @@ AGENT_CONFIGS = [
     ("ab_d2",           2,     True,       False),   # Alpha-Beta, depth 2
     ("ab_d3",           3,     True,       False),   # Alpha-Beta, depth 3
     ("ab_d3_ordered",   3,     True,       True),    # Alpha-Beta, depth 3 + move ordering
+    # ("ab_d4",           4,     True,       True),   # Alpha-Beta, depth 4
 ]
 
 # ---------------------------------------------------------------------------
@@ -34,6 +35,6 @@ INTERNAL_PLOT_OUTPUT = "internal_benchmark.png"
 ENGINE_ELO       = 1320    # target Elo for Stockfish — minimum supported by this build is 1320
 ENGINE_TIME      = 0.05     # seconds per engine move
 NUM_OPENINGS     = 6        # number of opening positions to test (from config/openings.py)
-MAX_PLIES        = 160      # truncate game after this many half-moves (avoids infinite draws)
+MAX_PLIES        = 300      # truncate game after this many half-moves (avoids infinite draws)
 VS_ENGINE_CSV    = "engine_benchmark_results.csv"
 VS_ENGINE_PLOT   = "engine_benchmark_summary.png"

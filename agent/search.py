@@ -118,7 +118,7 @@ def minimax(board, depth, alpha, beta, is_maximising, counter, move_ordering=Fal
           score - the minimax value of this node (centipawns)
           move  - the best chess.Move found at this node (None at leaves)
     """
-    counter["nodes"] += 1
+    counter[0] += 1
 
     if depth == 0 or board.is_game_over():
         return evaluate(board), None
@@ -167,7 +167,7 @@ def minimax_no_pruning(board, depth, is_maximising, counter, move_ordering=False
 
     Args / Returns: same as minimax() except there are no alpha/beta bounds.
     """
-    counter["nodes"] += 1
+    counter[0] += 1
 
     if depth == 0 or board.is_game_over():
         return evaluate(board), None
@@ -206,9 +206,9 @@ def search_position(board, config):
     Returns:
         SearchResult containing the chosen move plus timing/statistics.
     """
-    counter = {"nodes": 0}
+    counter = [0]
     is_max = board.turn == chess.WHITE
-    start = time.time()
+    start = time.perf_counter()
 
     if config.use_alpha_beta:
         score, move = minimax(
@@ -229,8 +229,8 @@ def search_position(board, config):
             config.move_ordering,
         )
 
-    elapsed = time.time() - start
-    return SearchResult(move, score, counter["nodes"], elapsed)
+    elapsed = time.perf_counter() - start
+    return SearchResult(move, score, counter[0], elapsed)
 
 
 def get_best_move_no_pruning(board, depth, move_ordering=False):
