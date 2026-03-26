@@ -32,9 +32,10 @@ INTERNAL_PLOT_OUTPUT = "internal_benchmark.png"
 # ---------------------------------------------------------------------------
 # Stockfish benchmark (agent strength vs external engine)
 # ---------------------------------------------------------------------------
+MAX_WORKERS      = None        # max parallel worker processes for vs_stockfish (None = all CPU cores)
 ENGINE_ELO       = 1320    # target Elo for Stockfish — minimum supported by this build is 1320
 ENGINE_TIME      = 0.05     # seconds per engine move
-NUM_OPENINGS     = 6        # number of opening positions to test (from config/openings.py)
+NUM_OPENINGS     = 50        # number of opening positions to test (from config/openings.py)
 MAX_PLIES        = 300      # truncate game after this many half-moves (avoids infinite draws)
 VS_ENGINE_CSV    = "engine_benchmark_results.csv"
 VS_ENGINE_PLOT   = "engine_benchmark_summary.png"

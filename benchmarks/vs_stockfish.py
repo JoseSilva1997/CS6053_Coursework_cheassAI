@@ -28,6 +28,9 @@ import argparse
 import csv
 from dataclasses import dataclass
 import math
+from multiprocessing import Pool
+import os
+import time
 
 import chess
 import chess.engine
@@ -37,6 +40,7 @@ from config.settings import (
     AGENT_CONFIGS,
     ENGINE_ELO,
     ENGINE_TIME,
+    MAX_WORKERS,
     NUM_OPENINGS,
     MAX_PLIES,
     VS_ENGINE_CSV,
@@ -338,6 +342,128 @@ def discover_engine_path():
     return None
 
 
+# ---------------------------------------------------------------------------
+# Multiprocessing worker helpers
+# ---------------------------------------------------------------------------
+
+_worker_engine = None
+_worker_limit = None
+
+
+def _init_worker(engine_path, engine_elo, engine_time):
+    """Initializer for each pool worker — spawns one Stockfish process."""
+    global _worker_engine, _worker_limit
+
+    _worker_engine = chess.engine.SimpleEngine.popen_uci(str(engine_path))
+
+    try:
+        _worker_engine.configure({"Threads": 1})
+    except chess.engine.EngineError:
+        pass
+
+    elo_opt = _worker_engine.options.get("UCI_Elo")
+    if elo_opt is not None:
+        elo_min = elo_opt.min or 0
+        elo_max = elo_opt.max or 9999
+        clamped = max(elo_min, min(elo_max, engine_elo))
+        try:
+            _worker_engine.configure({"UCI_LimitStrength": True, "UCI_Elo": clamped})
+        except chess.engine.EngineError:
+            pass
+
+    _worker_limit = chess.engine.Limit(time=engine_time)
+
+
+def _play_game_task(indexed_task):
+    """Worker function — plays a single game using the process-local engine."""
+    idx, (preset, opening_name, opening_fen, agent_color, max_plies) = indexed_task
+    record = play_game(
+        _worker_engine, preset, opening_name, opening_fen,
+        agent_color, _worker_limit, max_plies,
+    )
+    return idx, record
+
+
+# ---------------------------------------------------------------------------
+# Progress bar
+# ---------------------------------------------------------------------------
+
+def _print_progress(done, total, start_time):
+    elapsed = time.perf_counter() - start_time
+    pct = done / total if total > 0 else 1.0
+    bar_len = 30
+    filled = int(bar_len * pct)
+    bar = "\u2588" * filled + "\u2591" * (bar_len - filled)
+
+    mins, secs = divmod(int(elapsed), 60)
+    elapsed_str = f"{mins}m {secs:02d}s" if mins else f"{secs}s"
+
+    if done > 0 and done < total:
+        eta = elapsed * (total - done) / done
+        eta_m, eta_s = divmod(int(eta), 60)
+        eta_str = f"{eta_m}m {eta_s:02d}s" if eta_m else f"{eta_s}s"
+    elif done >= total:
+        eta_str = "0s"
+    else:
+        eta_str = "..."
+
+    sys.stdout.write(
+        f"\r  Playing games  [{bar}] {done}/{total}  "
+        f"elapsed: {elapsed_str}  ETA: {eta_str}   "
+    )
+    sys.stdout.flush()
+
+
+# ---------------------------------------------------------------------------
+# Validation (runs once in the main process before spawning workers)
+# ---------------------------------------------------------------------------
+
+def _validate_engine(engine_path, requested_elo):
+    """Spawn a temporary engine to check UCI options and print warnings."""
+    engine = chess.engine.SimpleEngine.popen_uci(str(engine_path))
+    clamped_elo = requested_elo
+    try:
+        elo_opt = engine.options.get("UCI_Elo")
+        if elo_opt is not None:
+            elo_min = elo_opt.min or 0
+            elo_max = elo_opt.max or 9999
+            clamped_elo = max(elo_min, min(elo_max, requested_elo))
+            if clamped_elo != requested_elo:
+                print(
+                    f"Warning: requested Elo {requested_elo} is outside engine range "
+                    f"[{elo_min}, {elo_max}]. Clamping to {clamped_elo}."
+                )
+        else:
+            print("Warning: this engine does not support UCI_LimitStrength/UCI_Elo; engine runs at full strength.")
+    finally:
+        engine.quit()
+    return clamped_elo
+
+
+# ---------------------------------------------------------------------------
+# Per-game result printing (after all games finish)
+# ---------------------------------------------------------------------------
+
+def _print_game_results(records, presets):
+    for preset in presets:
+        print(
+            f"[{preset.name}] depth={preset.config.depth}, "
+            f"alpha_beta={preset.config.use_alpha_beta}, "
+            f"move_ordering={preset.config.move_ordering}"
+        )
+        for record in records:
+            if record.preset_name != preset.name:
+                continue
+            print(
+                f"  {record.opening_name:<28} "
+                f"agent={record.agent_color:<5} "
+                f"result={record.outcome:<9} "
+                f"plies={record.plies:<3} "
+                f"avg_nodes={record.agent_avg_nodes:.0f}"
+            )
+        print()
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Benchmark this chess agent against a UCI engine."
@@ -391,6 +517,12 @@ def main():
         action="store_true",
         help="Display the matplotlib window after saving the summary plot.",
     )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=MAX_WORKERS,
+        help=f"Number of parallel worker processes. (default: {MAX_WORKERS or 'CPU count'})",
+    )
     args = parser.parse_args()
 
     presets = [parse_config_spec(spec) for spec in args.config] if args.config else build_default_presets()
@@ -403,75 +535,65 @@ def main():
             "No engine executable found. Put Stockfish in stockfish/ or pass --engine-path."
         )
 
+    # Build the flat list of game tasks.
+    tasks = [
+        (preset, opening_name, opening_fen, agent_color, args.max_plies)
+        for preset in presets
+        for opening_name, opening_fen in openings
+        for agent_color in (chess.WHITE, chess.BLACK)
+    ]
+
+    num_workers = min(args.workers or os.cpu_count() or 1, len(tasks))
+
+    # Validate engine options once (prints warnings) before spawning workers.
+    clamped_elo = _validate_engine(engine_path, args.engine_elo)
+
     print("Benchmarking agent against external engine")
     print(f"Engine path:          {engine_path}")
-    print(f"Engine target Elo:    {args.engine_elo}")
+    print(f"Engine target Elo:    {clamped_elo}")
     print(f"Engine time per move: {args.engine_time:.3f}s")
     print(f"Openings tested:      {len(openings)}")
     print(f"Configs tested:       {len(presets)}")
+    print(f"Total games:          {len(tasks)}")
+    print(f"Worker processes:     {num_workers}")
     print()
 
-    records = []
-    engine = chess.engine.SimpleEngine.popen_uci(str(engine_path))
-    try:
-        configure_options = {"Threads": 1}
-        try:
-            engine.configure(configure_options)
-        except chess.engine.EngineError:
-            pass
+    # Map from task index -> record so we can reconstruct insertion order.
+    results_by_index = {}
+    start_time = time.perf_counter()
 
-        elo_opt = engine.options.get("UCI_Elo")
-        if elo_opt is not None:
-            elo_min = elo_opt.min or 0
-            elo_max = elo_opt.max or 9999
-            clamped_elo = max(elo_min, min(elo_max, args.engine_elo))
-            if clamped_elo != args.engine_elo:
-                print(
-                    f"Warning: requested Elo {args.engine_elo} is outside engine range "
-                    f"[{elo_min}, {elo_max}]. Clamping to {clamped_elo}."
-                )
-            try:
-                engine.configure({"UCI_LimitStrength": True, "UCI_Elo": clamped_elo})
-            except chess.engine.EngineError as e:
-                print(f"Warning: could not set UCI_LimitStrength/UCI_Elo ({e}); engine runs at full strength.")
-        else:
-            print("Warning: this engine does not support UCI_LimitStrength/UCI_Elo; engine runs at full strength.")
+    pool = Pool(
+        processes=num_workers,
+        initializer=_init_worker,
+        initargs=(str(engine_path), clamped_elo, args.engine_time),
+    )
 
-        engine_limit = chess.engine.Limit(time=args.engine_time)
+    indexed_tasks = list(enumerate(tasks))
+    _print_progress(0, len(tasks), start_time)
+    for idx, record in pool.imap_unordered(_play_game_task, indexed_tasks):
+        results_by_index[idx] = record
+        _print_progress(len(results_by_index), len(tasks), start_time)
 
-        for preset in presets:
-            print(
-                f"[{preset.name}] depth={preset.config.depth}, "
-                f"alpha_beta={preset.config.use_alpha_beta}, "
-                f"move_ordering={preset.config.move_ordering}"
-            )
-            for opening_name, opening_fen in openings:
-                for agent_color in (chess.WHITE, chess.BLACK):
-                    record = play_game(
-                        engine,
-                        preset,
-                        opening_name,
-                        opening_fen,
-                        agent_color,
-                        engine_limit,
-                        args.max_plies,
-                    )
-                    records.append(record)
-                    print(
-                        f"  {opening_name:<28} "
-                        f"agent={record.agent_color:<5} "
-                        f"result={record.outcome:<9} "
-                        f"plies={record.plies:<3} "
-                        f"avg_nodes={record.agent_avg_nodes:.0f}"
-                    )
-            print()
-    finally:
-        engine.quit()
+    pool.terminate()
+    pool.join()
+
+    # Clear the progress line.
+    sys.stdout.write("\r" + " " * 80 + "\r")
+    sys.stdout.flush()
+
+    # Rebuild records in the original deterministic order.
+    records = [results_by_index[i] for i in range(len(tasks))]
+
+    total_elapsed = time.perf_counter() - start_time
+    mins, secs = divmod(int(total_elapsed), 60)
+    print(f"All {len(records)} games finished in {mins}m {secs:02d}s.\n")
+
+    _print_game_results(records, presets)
 
     write_csv(records, output_path)
     summaries = collect_summaries(records, presets)
 
-    print_summary_table(summaries, args.engine_elo)
+    print_summary_table(summaries, clamped_elo)
     plot_summaries(summaries, Path(args.plot_output), args.show_plot)
 
     print()
