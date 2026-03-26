@@ -1,57 +1,15 @@
 preset_name,opening_name,agent_color,outcome,score,plies,agent_moves,agent_avg_time_s,agent_avg_nodes,engine_avg_time_s
-mm_d2,Starting Position,white,win,1.0,27,14,0.05532205714306266,1062.357142857143,0.0
-mm_d2,Starting Position,black,draw,0.5,158,79,0.03132842151901542,671.9746835443038,0.0
-mm_d2,Italian Game,white,win,1.0,61,28,0.09715944285699152,1168.0357142857142,0.0
-mm_d2,Italian Game,black,draw,0.5,150,72,0.06310534861106337,721.5,0.0
-mm_d2,Queen's Gambit Declined,white,draw,0.5,75,35,0.06022094571438044,811.8571428571429,0.0
-mm_d2,Queen's Gambit Declined,black,draw,0.5,108,51,0.08227693137268943,959.8627450980392,0.0
-mm_d2,Sicilian Defence (Najdorf),white,draw,0.5,47,19,0.09996046842082394,1452.7894736842106,0.0
-mm_d2,Sicilian Defence (Najdorf),black,loss,0.0,87,38,0.06707486315774172,1083.1842105263158,0.0
-mm_d2,French Defence (Advance),white,loss,0.0,154,74,0.06222555135131237,1023.6891891891892,0.0
-mm_d2,French Defence (Advance),black,loss,0.0,73,34,0.08591155588226898,1282.735294117647,0.0
-mm_d2,Caro-Kann Defence,white,draw,0.5,133,64,0.05031475781245831,655.3125,0.0
-mm_d2,Caro-Kann Defence,black,win,1.0,100,47,0.09571981489352765,1317.9787234042553,0.0
-mm_d2,Ruy Lopez (Morphy Defense),white,loss,0.0,88,41,0.10323603658541354,1460.8292682926829,0.0
-mm_d2,Ruy Lopez (Morphy Defense),black,loss,0.0,67,30,0.1194255566665864,1542.0,0.0
-ab_d2,Starting Position,white,draw,0.5,131,66,0.0243567045454256,286.74242424242425,0.0
-ab_d2,Starting Position,black,loss,0.0,51,25,0.014295920000004117,175.2,0.0
-ab_d2,Italian Game,white,loss,0.0,104,49,0.03266000000009199,416.7959183673469,0.0
-ab_d2,Italian Game,black,loss,0.0,115,54,0.0269690944444476,322.8703703703704,0.0
-ab_d2,Queen's Gambit Declined,white,loss,0.0,32,13,0.058334230769385334,680.3076923076923,0.0
-ab_d2,Queen's Gambit Declined,black,loss,0.0,79,36,0.026294216666732,348.3888888888889,0.0
-ab_d2,Sicilian Defence (Najdorf),white,win,1.0,71,31,0.048902993548601385,564.741935483871,0.0
-ab_d2,Sicilian Defence (Najdorf),black,loss,0.0,49,19,0.03792131578953367,480.05263157894734,0.0
-ab_d2,French Defence (Advance),white,loss,0.0,74,34,0.03788635588235218,509.7352941176471,0.0
-ab_d2,French Defence (Advance),black,loss,0.0,99,47,0.026830046808328838,270.5531914893617,0.0
-ab_d2,Caro-Kann Defence,white,loss,0.0,64,29,0.05935106551743079,844.8275862068965,0.0
-ab_d2,Caro-Kann Defence,black,loss,0.0,57,25,0.03245704799992381,344.56,0.0
-ab_d2,Ruy Lopez (Morphy Defense),white,loss,0.0,130,62,0.020480174193512685,271.14516129032256,0.0
-ab_d2,Ruy Lopez (Morphy Defense),black,loss,0.0,93,43,0.024988981395434293,280.4186046511628,0.0
-ab_d3,Starting Position,white,loss,0.0,34,17,0.2941081235289055,3967.705882352941,0.0
-ab_d3,Starting Position,black,win,1.0,48,24,0.35441517916653237,4465.25,0.0
-ab_d3,Italian Game,white,loss,0.0,62,28,0.5443181035713808,6586.357142857143,0.0
-ab_d3,Italian Game,black,loss,0.0,67,30,0.6152750566665418,8155.6,0.0
-ab_d3,Queen's Gambit Declined,white,loss,0.0,92,43,0.6262770441859006,8007.976744186047,0.0
-ab_d3,Queen's Gambit Declined,black,loss,0.0,73,33,0.24763324242419252,3082.6060606060605,0.0
-ab_d3,Sicilian Defence (Najdorf),white,draw,0.5,156,73,0.3492374054794585,4452.602739726028,0.0
-ab_d3,Sicilian Defence (Najdorf),black,draw,0.5,88,39,0.5349891564101432,7141.615384615385,0.0
-ab_d3,French Defence (Advance),white,draw,0.5,105,50,0.40923814999980096,5343.66,0.0
-ab_d3,French Defence (Advance),black,draw,0.5,106,51,0.5663042490194522,7684.490196078431,0.0
-ab_d3,Caro-Kann Defence,white,win,1.0,45,20,0.6329854099997647,8659.0,0.0
-ab_d3,Caro-Kann Defence,black,draw,0.5,94,44,0.2870985681817977,3869.681818181818,0.0
-ab_d3,Ruy Lopez (Morphy Defense),white,loss,0.0,60,27,0.5506020629631907,6895.481481481482,0.0
-ab_d3,Ruy Lopez (Morphy Defense),black,loss,0.0,35,14,0.3002432857144543,3979.714285714286,0.0
-ab_d3_ordered,Starting Position,white,loss,0.0,180,90,0.15737443444445995,1158.2111111111112,0.0
-ab_d3_ordered,Starting Position,black,loss,0.0,153,76,0.21843365131584697,1367.4342105263158,0.0
-ab_d3_ordered,Italian Game,white,draw,0.5,117,56,0.14606861964281442,1007.8571428571429,0.0
-ab_d3_ordered,Italian Game,black,win,1.0,64,29,0.24304235172405306,1946.0,0.0
-ab_d3_ordered,Queen's Gambit Declined,white,loss,0.0,118,56,0.22740563035725764,1788.9285714285713,0.0
-ab_d3_ordered,Queen's Gambit Declined,black,draw,0.5,116,55,0.23205414181809994,1555.709090909091,0.0
-ab_d3_ordered,Sicilian Defence (Najdorf),white,win,1.0,115,53,0.27003923396251545,1993.5094339622642,0.0
-ab_d3_ordered,Sicilian Defence (Najdorf),black,win,1.0,52,21,0.16226132380957314,1102.2857142857142,0.0
-ab_d3_ordered,French Defence (Advance),white,win,1.0,47,21,0.3045202523809123,2297.3333333333335,0.0
-ab_d3_ordered,French Defence (Advance),black,win,1.0,38,17,0.2744096999997376,1750.235294117647,0.0
-ab_d3_ordered,Caro-Kann Defence,white,draw,0.5,79,37,0.23204265945954633,1463.6756756756756,0.0
-ab_d3_ordered,Caro-Kann Defence,black,win,1.0,68,31,0.19060120967708738,1553.0967741935483,0.0
-ab_d3_ordered,Ruy Lopez (Morphy Defense),white,draw,0.5,45,20,0.39647860000040963,2654.6,0.0
-ab_d3_ordered,Ruy Lopez (Morphy Defense),black,draw,0.5,86,40,0.23911323500014986,1598.875,0.0
+ab_d3_ordered,Starting Position,white,loss,0.0,56,28,0.10119052142850446,1205.607142857143,0.0
+ab_d3_ordered,Starting Position,black,loss,0.0,83,41,0.06745102682929782,763.3170731707318,0.0
+ab_d3_ordered,Italian Game,white,draw,0.5,183,89,0.04424172022463404,536.1910112359551,0.0
+ab_d3_ordered,Italian Game,black,loss,0.0,61,27,0.17533195185151945,1893.7037037037037,0.0
+ab_d3_ordered,Queen's Gambit Declined,white,draw,0.5,173,84,0.05922630595239839,655.5357142857143,0.0
+ab_d3_ordered,Queen's Gambit Declined,black,win,1.0,84,39,0.06604051538469764,735.4871794871794,0.0
+ab_d3_ordered,Sicilian Defence (Najdorf),white,loss,0.0,192,91,0.10276701428553608,1113.3736263736264,0.0
+ab_d3_ordered,Sicilian Defence (Najdorf),black,loss,0.0,61,25,0.1168682479999552,1230.64,0.0
+ab_d3_ordered,French Defence (Advance),white,draw,0.5,135,65,0.11492558769238642,1334.0153846153846,0.0
+ab_d3_ordered,French Defence (Advance),black,win,1.0,46,21,0.11238387619033303,1475.6666666666667,0.0
+ab_d3_ordered,Caro-Kann Defence,white,win,1.0,53,24,0.16894875833327205,1712.8333333333333,0.0
+ab_d3_ordered,Caro-Kann Defence,black,loss,0.0,101,47,0.12342318510622755,1460.2978723404256,0.0
+ab_d3_ordered,Ruy Lopez (Morphy Defense),white,draw,0.5,77,36,0.1395285527779985,1760.638888888889,0.0
+ab_d3_ordered,Ruy Lopez (Morphy Defense),black,win,1.0,20,7,0.08007675714283582,1113.2857142857142,0.0

@@ -33,12 +33,15 @@ of the tree without changing the result - the same move is chosen as pure
 Minimax, just faster.
 """
 from dataclasses import dataclass
-import math
 import time
 
 import chess
 
 from .evaluation import evaluate
+
+# Integer bounds used instead of _INF.  Any legal evaluation fits inside
+# these limits and integer comparisons are faster than float in CPython.
+_INF = 200_000
 
 
 @dataclass(frozen=True)
@@ -93,14 +96,15 @@ def _move_order_score(board, move):
 
 
 def _get_candidate_moves(board, move_ordering):
+    if not move_ordering:
+        return board.legal_moves
     moves = list(board.legal_moves)
-    if move_ordering:
-        score_move = lambda move: _move_order_score(board, move)
-        moves.sort(key=score_move, reverse=True)
+    moves.sort(key=lambda m: _move_order_score(board, m), reverse=True)
     return moves
 
 
-def minimax(board, depth, alpha, beta, is_maximising, counter, move_ordering=False):
+def minimax(board, depth, alpha, beta, is_maximising, counter, move_ordering=False,
+            _evaluate=evaluate, _get_moves=_get_candidate_moves):
     """
     Minimax search with Alpha-Beta pruning.
 
@@ -123,47 +127,53 @@ def minimax(board, depth, alpha, beta, is_maximising, counter, move_ordering=Fal
     counter[0] += 1
 
     if depth == 0 or board.is_game_over():
-        return evaluate(board), None
+        return _evaluate(board), None
+
+    push = board.push
+    pop = board.pop
 
     if is_maximising:
-        best_score = -math.inf
+        best_score = -_INF
         best_move = None
-        for move in _get_candidate_moves(board, move_ordering):
-            board.push(move)
+        for move in _get_moves(board, move_ordering):
+            push(move)
             score, _ = minimax(
                 board, depth - 1, alpha, beta, False, counter, move_ordering
             )
-            board.pop()
+            pop()
 
             if score > best_score:
                 best_score = score
                 best_move = move
 
-            alpha = max(alpha, best_score)
+            if best_score > alpha:
+                alpha = best_score
             if beta <= alpha:
                 break
         return best_score, best_move
 
-    best_score = math.inf
+    best_score = _INF
     best_move = None
-    for move in _get_candidate_moves(board, move_ordering):
-        board.push(move)
+    for move in _get_moves(board, move_ordering):
+        push(move)
         score, _ = minimax(
             board, depth - 1, alpha, beta, True, counter, move_ordering
         )
-        board.pop()
+        pop()
 
         if score < best_score:
             best_score = score
             best_move = move
 
-        beta = min(beta, best_score)
+        if best_score < beta:
+            beta = best_score
         if beta <= alpha:
             break
     return best_score, best_move
 
 
-def minimax_no_pruning(board, depth, is_maximising, counter, move_ordering=False):
+def minimax_no_pruning(board, depth, is_maximising, counter, move_ordering=False,
+                       _evaluate=evaluate, _get_moves=_get_candidate_moves):
     """
     Pure Minimax without Alpha-Beta pruning.
 
@@ -172,29 +182,32 @@ def minimax_no_pruning(board, depth, is_maximising, counter, move_ordering=False
     counter[0] += 1
 
     if depth == 0 or board.is_game_over():
-        return evaluate(board), None
+        return _evaluate(board), None
 
+    push = board.push
+    pop = board.pop
     best_move = None
+
     if is_maximising:
-        best_score = -math.inf
-        for move in _get_candidate_moves(board, move_ordering):
-            board.push(move)
+        best_score = -_INF
+        for move in _get_moves(board, move_ordering):
+            push(move)
             score, _ = minimax_no_pruning(
                 board, depth - 1, False, counter, move_ordering
             )
-            board.pop()
+            pop()
             if score > best_score:
                 best_score = score
                 best_move = move
         return best_score, best_move
 
-    best_score = math.inf
-    for move in _get_candidate_moves(board, move_ordering):
-        board.push(move)
+    best_score = _INF
+    for move in _get_moves(board, move_ordering):
+        push(move)
         score, _ = minimax_no_pruning(
             board, depth - 1, True, counter, move_ordering
         )
-        board.pop()
+        pop()
         if score < best_score:
             best_score = score
             best_move = move
@@ -216,8 +229,8 @@ def search_position(board, config):
         score, move = minimax(
             board,
             config.depth,
-            -math.inf,
-            math.inf,
+            -_INF,
+            _INF,
             is_max,
             counter,
             config.move_ordering,

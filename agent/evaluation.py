@@ -154,6 +154,26 @@ BLACK_SCORES = {
     for piece_type in PIECE_TYPES
 }
 
+# Flat lookup arrays indexed by (piece_type * 64 + square).
+# A single tuple index replaces a dict lookup + tuple index per piece,
+# which is measurably faster in CPython's eval loop.
+_WHITE_FLAT = tuple(
+    WHITE_SCORES.get(pt, (0,) * 64)[sq]
+    for pt in range(7)          # 0 is unused, 1-6 are piece types
+    for sq in range(64)
+)
+_BLACK_FLAT = tuple(
+    BLACK_SCORES.get(pt, (0,) * 64)[sq]
+    for pt in range(7)
+    for sq in range(64)
+)
+
+# Pre-bind constants used inside evaluate() to avoid repeated global lookups.
+_WHITE = chess.WHITE
+_BLACK = chess.BLACK
+_PIECE_TYPES = PIECE_TYPES
+
+
 def evaluate(board):
     """
     Heuristic evaluation of the board position from White's perspective.
@@ -178,24 +198,22 @@ def evaluate(board):
           < 0  Black is ahead
             0  Equal position (or forced draw)
     """
-    if board.is_checkmate():
-        return -100000 if board.turn else 100000
-    if board.is_stalemate() or board.is_insufficient_material():
+    if not any(board.legal_moves):
+        return (-100000 if board.turn else 100000) if board.is_check() else 0
+    if board.is_insufficient_material():
         return 0
 
     score = 0
-    white_scores = WHITE_SCORES
-    black_scores = BLACK_SCORES
+    pieces = board.pieces
+    wf = _WHITE_FLAT
+    bf = _BLACK_FLAT
 
-    for piece_type in PIECE_TYPES:
-        white_piece_scores = white_scores[piece_type]
-        black_piece_scores = black_scores[piece_type]
-
-        for square in board.pieces(piece_type, chess.WHITE):
-            score += white_piece_scores[square]
-
-        for square in board.pieces(piece_type, chess.BLACK):
-            score -= black_piece_scores[square]
+    for piece_type in _PIECE_TYPES:
+        offset = piece_type << 6            # piece_type * 64
+        for sq in pieces(piece_type, _WHITE):
+            score += wf[offset + sq]
+        for sq in pieces(piece_type, _BLACK):
+            score -= bf[offset + sq]
 
     return score
 
