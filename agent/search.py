@@ -74,15 +74,16 @@ def _move_order_score(board, move):
     priority because they tend to create better cutoffs.
     """
     score = 0
+    piece_type_at = board.piece_type_at
 
     if move.promotion:
         score += 10_000 + (move.promotion * 100)
 
     if board.is_capture(move):
-        captured = board.piece_at(move.to_square)
-        attacker = board.piece_at(move.from_square)
-        captured_value = 0 if captured is None else captured.piece_type * 100
-        attacker_value = 0 if attacker is None else attacker.piece_type * 10
+        captured_type = piece_type_at(move.to_square)
+        attacker_type = piece_type_at(move.from_square)
+        captured_value = 0 if captured_type is None else captured_type * 100
+        attacker_value = 0 if attacker_type is None else attacker_type * 10
         score += 5_000 + captured_value - attacker_value
 
     if board.gives_check(move):
@@ -94,7 +95,8 @@ def _move_order_score(board, move):
 def _get_candidate_moves(board, move_ordering):
     moves = list(board.legal_moves)
     if move_ordering:
-        moves.sort(key=lambda move: _move_order_score(board, move), reverse=True)
+        score_move = lambda move: _move_order_score(board, move)
+        moves.sort(key=score_move, reverse=True)
     return moves
 
 
