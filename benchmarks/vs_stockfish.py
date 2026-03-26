@@ -126,14 +126,31 @@ def outcome_from_agent_perspective(board, agent_color, truncated):
     return "loss", 0.0
 
 
+def _is_game_over(board):
+    """
+    Game-over check that includes draw conditions without generating all legal moves.
+
+    The built-in claim_draw path calls can_claim_threefold_repetition() which
+    generates *every* legal move, pushes it, checks for repetition, and pops.
+    That hidden move-generation pass runs every ply and dominates benchmark time.
+
+    Instead we check:
+      - is_game_over()     : checkmate / stalemate / fivefold / seventy-five-move / insufficient
+      - is_repetition(3)   : current position already appeared 3 times (O(move_stack))
+      - halfmove_clock≥100 : fifty-move rule (current position, not "any next move")
+    """
+    return board.is_game_over() or board.is_repetition(3) or board.halfmove_clock >= 100
+
+
 def play_game(engine, preset, opening_name, opening_fen, agent_color, engine_limit, max_plies):
     board = chess.Board(opening_fen)
     agent_move_times = []
     agent_nodes = []
     engine_move_times = []
+    game_over = False
     truncated = False
 
-    while not board.is_game_over(claim_draw=True) and board.ply() < max_plies:
+    while not game_over and board.ply() < max_plies:
         if board.turn == agent_color:
             result = search_position(board, preset.config)
             if result.move is None:
@@ -142,14 +159,19 @@ def play_game(engine, preset, opening_name, opening_fen, agent_color, engine_lim
             agent_move_times.append(result.elapsed_seconds)
             agent_nodes.append(result.nodes)
         else:
-            engine_result = engine.play(board, engine_limit)
+            # Send only the current FEN to the engine so it doesn't have to
+            # replay the full move history (which grows every ply).
+            fen_board = chess.Board(board.fen())
+            engine_result = engine.play(fen_board, engine_limit)
             if engine_result.move is None:
                 break
             board.push(engine_result.move)
             if engine_result.info and "time" in engine_result.info:
                 engine_move_times.append(engine_result.info["time"])
 
-    if board.ply() >= max_plies and not board.is_game_over(claim_draw=True):
+        game_over = _is_game_over(board)
+
+    if not game_over and board.ply() >= max_plies:
         truncated = True
 
     outcome, score = outcome_from_agent_perspective(board, agent_color, truncated)
