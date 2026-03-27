@@ -32,6 +32,8 @@ from multiprocessing import Pool
 import os
 import time
 
+import signal
+
 import chess
 import chess.engine
 
@@ -350,9 +352,19 @@ _worker_limit = None
 
 def _init_worker(engine_path, engine_elo, engine_time):
     """Initializer for each pool worker — spawns one Stockfish process."""
+    signal.signal(signal.SIGINT, signal.SIG_IGN)  # let the main process handle Ctrl+C
     global _worker_engine, _worker_limit
 
-    _worker_engine = chess.engine.SimpleEngine.popen_uci(str(engine_path))
+    # On Windows, Ctrl+C (CTRL_C_EVENT) is broadcast to all processes in the
+    # console's process group, including Stockfish children.  Spawning with
+    # CREATE_NEW_PROCESS_GROUP puts each engine in its own group so it never
+    # receives the signal — pool.terminate() is what stops it instead.
+    popen_kwargs = {}
+    if sys.platform == "win32":
+        import subprocess as _subprocess
+        popen_kwargs["creationflags"] = _subprocess.CREATE_NEW_PROCESS_GROUP
+
+    _worker_engine = chess.engine.SimpleEngine.popen_uci(str(engine_path), **popen_kwargs)
 
     try:
         _worker_engine.configure({"Threads": 1})
@@ -554,6 +566,7 @@ def main():
     print(f"Configs tested:       {len(presets)}")
     print(f"Total games:          {len(tasks)}")
     print(f"Worker processes:     {num_workers}")
+    print("Press Ctrl+C to stop early\n")
     print()
 
     # Map from task index -> record so we can reconstruct insertion order.
@@ -567,10 +580,25 @@ def main():
     )
 
     indexed_tasks = list(enumerate(tasks))
+    async_results = [pool.apply_async(_play_game_task, (task,)) for task in indexed_tasks]
+    pending = set(range(len(async_results)))
     _print_progress(0, len(tasks), start_time)
-    for idx, record in pool.imap_unordered(_play_game_task, indexed_tasks):
-        results_by_index[idx] = record
-        _print_progress(len(results_by_index), len(tasks), start_time)
+    try:
+        while pending:
+            for i in list(pending):
+                if async_results[i].ready():
+                    idx, record = async_results[i].get()
+                    results_by_index[idx] = record
+                    pending.discard(i)
+                    _print_progress(len(results_by_index), len(tasks), start_time)
+            if pending:
+                time.sleep(0.05)  # interruptible by KeyboardInterrupt on Windows
+    except KeyboardInterrupt:
+        sys.stdout.write("\r" + " " * 80 + "\r")
+        print("Stopping...", flush=True)
+        pool.terminate()
+        pool.join()
+        raise SystemExit(1)
 
     pool.terminate()
     pool.join()
