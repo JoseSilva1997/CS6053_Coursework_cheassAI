@@ -16,15 +16,15 @@ Format per entry: (name, depth, use_alpha_beta, move_ordering)
 # ---------------------------------------------------------------------------
 AGENT_CONFIGS = [
     # name              depth  alpha_beta  move_ordering
-    ("mm_d2",           2,     False,      False),   # pure Minimax, depth 2
-    ("ab_d2",           2,     True,       False),   # Alpha-Beta, depth 2
-    ("ab_d2_ordered",   2,     True,       True),    # Alpha-Beta, depth 2 + move ordering
-    ("mm_d3",           3,     False,      False),   # pure Minimax, depth 3
-    ("ab_d3",           3,     True,       False),   # Alpha-Beta, depth 3
-    ("ab_d3_ordered",   3,     True,       True),    # Alpha-Beta, depth 3 + move ordering
+    # ("mm_d2",           2,     False,      False),   # pure Minimax, depth 2
+    # ("ab_d2",           2,     True,       False),   # Alpha-Beta, depth 2
+    # ("ab_d2_ordered",   2,     True,       True),    # Alpha-Beta, depth 2 + move ordering
+    # ("mm_d3",           3,     False,      False),   # pure Minimax, depth 3
+    # ("ab_d3",           3,     True,       False),   # Alpha-Beta, depth 3
+    # ("ab_d3_ordered",   3,     True,       True),    # Alpha-Beta, depth 3 + move ordering
     # ("mm_d4",           4,     False,      False),   # pure Minimax, depth 4
-    # ("ab_d4",           4,     True,       False),   # Alpha-Beta, depth 4
-    # ("ab_d4_ordered",   4,     True,       True),   # Alpha-Beta, depth 4 + move ordering
+    ("ab_d4",           4,     True,       False),   # Alpha-Beta, depth 4
+    ("ab_d4_ordered",   4,     True,       True),   # Alpha-Beta, depth 4 + move ordering
 ]
 
 # ---------------------------------------------------------------------------
@@ -39,7 +39,7 @@ INTERNAL_PLOT_OUTPUT = "internal_benchmark.png"
 MAX_WORKERS      = None         # max parallel worker processes for vs_stockfish (None = all CPU cores)
 ENGINE_ELO       = 1320         # target Elo for Stockfish — minimum supported by this build is 1320
 ENGINE_TIME      = 0.05         # seconds per engine move
-NUM_OPENINGS     = 1           # number of opening positions to test (from config/openings.py)
+NUM_OPENINGS     = 50           # number of opening positions to test (from config/openings.py)
 MAX_PLIES        = 500          # truncate game after this many half-moves (avoids infinite draws)
 VS_ENGINE_CSV    = "engine_benchmark_results.csv"
 VS_ENGINE_PLOT   = "engine_benchmark_summary.png"
