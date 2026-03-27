@@ -23,11 +23,19 @@ def build_opening_suite(count):
     """
     Return a list of (name, FEN) pairs to use as starting positions.
 
-    Always includes the standard starting position first, then up to
-    `count` curated openings from config/openings.py.
+    Always includes the standard starting position first, then `count`
+    curated openings from config/openings.py.
+
+    If `count` exceeds the number of curated openings, the list wraps
+    around from the start again.
     """
     openings = [("Starting Position", chess.STARTING_FEN)]
-    openings.extend(OPENING_POSITIONS[:count])
+    curated_count = max(0, count)
+    num_curated_openings = len(OPENING_POSITIONS)
+
+    for i in range(curated_count):
+        openings.append(OPENING_POSITIONS[i % num_curated_openings])
+
     return openings
 
 
