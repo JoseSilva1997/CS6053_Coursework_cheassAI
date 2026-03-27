@@ -244,9 +244,7 @@ def estimate_elo(opponent_elo, score_pct):
 
 
 def collect_summaries(records, presets):
-    summaries = [summarise_records(records, preset.name) for preset in presets]
-    summaries.sort(key=lambda summary: (-summary["score_pct"], summary["agent_avg_time_s"]))
-    return summaries
+    return [summarise_records(records, preset.name) for preset in presets]
 
 
 def print_summary_table(summaries, engine_elo):

@@ -37,11 +37,16 @@ import time
 
 import chess
 
-from .evaluation import evaluate
+from .evaluation import BLACK_SCORES, PIECE_VALUES, WHITE_SCORES, evaluate
 
 # Integer bounds used instead of _INF.  Any legal evaluation fits inside
 # these limits and integer comparisons are faster than float in CPython.
 _INF = 200_000
+_WHITE = chess.WHITE
+_PAWN = chess.PAWN
+_KING = chess.KING
+_CHECK_BONUS = 800
+_CASTLE_BONUS = 600
 
 
 @dataclass(frozen=True)
@@ -73,9 +78,12 @@ def _get_candidate_moves(board, move_ordering):
     if not move_ordering:
         return board.legal_moves
 
+    mover_is_white = board.turn == _WHITE
     is_capture = board.is_capture
     gives_check = board.gives_check
     piece_type_at = board.piece_type_at
+    score_table = WHITE_SCORES if mover_is_white else BLACK_SCORES
+    opponent_table = BLACK_SCORES if mover_is_white else WHITE_SCORES
 
     moves = list(board.legal_moves)
     moves.sort(
@@ -84,13 +92,28 @@ def _get_candidate_moves(board, move_ordering):
         ) + (
             (
                 5_000
-                + ((piece_type_at(move.to_square) or 0) * 100)
-                - ((piece_type_at(move.from_square) or 0) * 10)
+                + (
+                    PIECE_VALUES[_PAWN]
+                    if board.is_en_passant(move)
+                    else PIECE_VALUES.get(piece_type_at(move.to_square) or 0, 0)
+                )
+                - PIECE_VALUES.get(piece_type_at(move.from_square) or 0, 0) // 10
             )
             if is_capture(move)
             else 0
         ) + (
-            1_000 if gives_check(move) else 0
+            score_table[move.promotion or piece_type_at(move.from_square)][move.to_square]
+            - score_table[piece_type_at(move.from_square)][move.from_square]
+        ) + (
+            _CASTLE_BONUS
+            if piece_type_at(move.from_square) == _KING and board.is_castling(move)
+            else 0
+        ) + (
+            _CHECK_BONUS if gives_check(move) else 0
+        ) + (
+            opponent_table[move.promotion][move.to_square]
+            if move.promotion
+            else 0
         ),
         reverse=True,
     )
