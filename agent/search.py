@@ -69,37 +69,31 @@ class SearchResult:
     elapsed_seconds: float
 
 
-def _move_order_score(board, move):
-    """
-    Score moves so tactical moves are searched before quiet ones.
-
-    This is intentionally simple: promotions, captures, and checks are given
-    priority because they tend to create better cutoffs.
-    """
-    score = 0
-    piece_type_at = board.piece_type_at
-
-    if move.promotion:
-        score += 10_000 + (move.promotion * 100)
-
-    if board.is_capture(move):
-        captured_type = piece_type_at(move.to_square)
-        attacker_type = piece_type_at(move.from_square)
-        captured_value = 0 if captured_type is None else captured_type * 100
-        attacker_value = 0 if attacker_type is None else attacker_type * 10
-        score += 5_000 + captured_value - attacker_value
-
-    if board.gives_check(move):
-        score += 1_000
-
-    return score
-
-
 def _get_candidate_moves(board, move_ordering):
     if not move_ordering:
         return board.legal_moves
+
+    is_capture = board.is_capture
+    gives_check = board.gives_check
+    piece_type_at = board.piece_type_at
+
     moves = list(board.legal_moves)
-    moves.sort(key=lambda m: _move_order_score(board, m), reverse=True)
+    moves.sort(
+        key=lambda move: (
+            (10_000 + (move.promotion * 100)) if move.promotion else 0
+        ) + (
+            (
+                5_000
+                + ((piece_type_at(move.to_square) or 0) * 100)
+                - ((piece_type_at(move.from_square) or 0) * 10)
+            )
+            if is_capture(move)
+            else 0
+        ) + (
+            1_000 if gives_check(move) else 0
+        ),
+        reverse=True,
+    )
     return moves
 
 

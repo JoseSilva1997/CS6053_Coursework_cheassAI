@@ -172,6 +172,7 @@ _BLACK_FLAT = tuple(
 _WHITE = chess.WHITE
 _BLACK = chess.BLACK
 _PIECE_TYPES = PIECE_TYPES
+_scan_forward = chess.scan_forward
 
 
 def evaluate(board):
@@ -204,15 +205,37 @@ def evaluate(board):
         return 0
 
     score = 0
-    pieces = board.pieces
+    pawns = board.pawns
+    knights = board.knights
+    bishops = board.bishops
+    rooks = board.rooks
+    queens = board.queens
+    kings = board.kings
+    white_occ = board.occupied_co[_WHITE]
+    black_occ = board.occupied_co[_BLACK]
     wf = _WHITE_FLAT
     bf = _BLACK_FLAT
+    scan = _scan_forward
 
     for piece_type in _PIECE_TYPES:
-        offset = piece_type << 6            # piece_type * 64
-        for sq in pieces(piece_type, _WHITE):
+        offset = piece_type << 6
+
+        if piece_type == chess.PAWN:
+            mask = pawns
+        elif piece_type == chess.KNIGHT:
+            mask = knights
+        elif piece_type == chess.BISHOP:
+            mask = bishops
+        elif piece_type == chess.ROOK:
+            mask = rooks
+        elif piece_type == chess.QUEEN:
+            mask = queens
+        else:
+            mask = kings
+
+        for sq in scan(mask & white_occ):
             score += wf[offset + sq]
-        for sq in pieces(piece_type, _BLACK):
+        for sq in scan(mask & black_occ):
             score -= bf[offset + sq]
 
     return score
