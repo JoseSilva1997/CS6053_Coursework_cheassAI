@@ -16,18 +16,22 @@ pip install pygame-ce python-chess matplotlib
 
 ```
 agent/
-  search.py       # Minimax and Alpha-Beta search algorithms
-  evaluation.py   # Heuristic board evaluation (material + piece-square tables)
+  search.py         # Minimax and Alpha-Beta search algorithms
+  evaluation.py     # Heuristic board evaluation (material + piece-square tables)
 
 config/
-  settings.py     # All benchmark parameters — edit this before running
-  openings.py     # 50 curated opening positions (FENs) used in benchmarks
+  settings.py       # All benchmark parameters — edit this before running
+  openings.py       # 50 curated opening positions (FENs) used in benchmarks
 
 benchmarks/
-  internal.py     # Efficiency comparison: Minimax vs Alpha-Beta (nodes, time)
-  vs_stockfish.py # Strength benchmark: agent configurations vs Stockfish
+  vs_stockfish.py   # Entry point: CLI and main() orchestration
+  models.py         # Shared dataclasses (AgentPreset, GameRecord)
+  game.py           # Single-game logic (play_game, opening suite)
+  worker.py         # Multiprocessing pool, engine discovery and validation
+  reporting.py      # Terminal output, CSV, and plot generation
+  internal.py       # Efficiency comparison: Minimax vs Alpha-Beta (nodes, time)
 
-stockfish/        # Place the Stockfish executable here
+stockfish/          # Place the Stockfish executable here
 ```
 
 ## Configuration
@@ -84,7 +88,9 @@ All defaults come from `config/settings.py`. CLI flags override them when needed
 
 3. **Alpha-Beta pruning** — Skips branches that cannot affect the final decision, dramatically reducing nodes searched without changing the chosen move.
 
-4. **Evaluation function** — At the depth limit, the board is scored using piece material values plus piece-square tables that reward good positioning. This heuristic is what makes the search *informed* rather than blind.
+4. **Move ordering** — An enhancement to Alpha-Beta that sorts moves before searching them (promotions, captures, checks first). Alpha-Beta prunes most aggressively when it sees the best moves first, so good ordering can reduce nodes searched further without changing the result.
+
+5. **Evaluation function** — At the depth limit, the board is scored using piece material values plus piece-square tables that reward good positioning. This heuristic is what makes the search *informed* rather than blind.
 
 ## Original Contributions
 
@@ -95,6 +101,10 @@ All defaults come from `config/settings.py`. CLI flags override them when needed
 | `config/settings.py` | Centralised benchmark configuration |
 | `config/openings.py` | Curated opening position suite |
 | `benchmarks/internal.py` | Efficiency comparison benchmark |
-| `benchmarks/vs_stockfish.py` | External engine strength benchmark |
+| `benchmarks/vs_stockfish.py` | External engine benchmark entry point (CLI + orchestration) |
+| `benchmarks/models.py` | Shared dataclasses used across the benchmark |
+| `benchmarks/game.py` | Single-game play logic and opening suite builder |
+| `benchmarks/worker.py` | Parallel game execution via multiprocessing pool |
+| `benchmarks/reporting.py` | Results output: terminal tables, CSV, and plots |
 
 The `python-chess` library is used for board representation, move generation, and UCI engine communication.

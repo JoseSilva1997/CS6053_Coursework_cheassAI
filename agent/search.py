@@ -75,6 +75,34 @@ class SearchResult:
 
 
 def _get_candidate_moves(board, move_ordering):
+    """
+    Return the legal moves for the current position, optionally sorted by quality.
+
+    When move_ordering is False, the unsorted generator from board.legal_moves is
+    returned directly — no list allocation, no sorting cost.
+
+    When move_ordering is True, moves are materialised into a list and sorted
+    by a composite heuristic score (highest first) so that Alpha-Beta pruning
+    sees the most promising moves earliest.  A beta-cutoff on the first move
+    skips all remaining moves entirely, which is the best-case pruning scenario.
+
+    Scoring terms (summed, highest wins):
+      1. Promotions       (+10 000 + promotion-piece bonus)
+                          Searched first — a promotion almost always changes the game.
+      2. Captures         (+5 000 + victim value - attacker value / 10)
+                          MVV-LVA heuristic: prefer capturing a high-value piece with
+                          a low-value one (e.g. pawn takes queen scores highest).
+      3. Positional gain  (piece-square table score at destination - source)
+                          Rewards moves that improve the piece's position even when
+                          no capture or special move is involved.
+      4. Castling         (+600)
+                          Castling improves king safety and connects the rooks.
+      5. Checks           (+800)
+                          Forcing moves restrict the opponent's replies and often
+                          lead to immediate material gain or checkmate.
+      6. Promotion target (+opponent table bonus for the promoted piece)
+                          Extra positional credit for where the promoted piece lands.
+    """
     if not move_ordering:
         return board.legal_moves
 
