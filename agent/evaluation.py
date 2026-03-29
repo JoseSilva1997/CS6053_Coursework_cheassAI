@@ -130,30 +130,50 @@ TABLES = {
     chess.KING:   KING_TABLE
 }
 
-def get_table_index(square, color):
-    """
-    Convert a board square to the correct index into a piece-square table.
+PIECE_TYPES = (
+    chess.PAWN,
+    chess.KNIGHT,
+    chess.BISHOP,
+    chess.ROOK,
+    chess.QUEEN,
+    chess.KING,
+)
 
-    The tables are written from White's perspective (rank 8 at index 0).
-    - For White pieces: we flip the rank so that rank 8 → row 0 of the table.
-    - For Black pieces: the table is used as-is (rank 1 → row 0), which
-      mirrors the layout so Black's bonuses are symmetrical to White's.
+WHITE_SCORES = {
+    piece_type: tuple(
+        PIECE_VALUES[piece_type] + TABLES[piece_type][chess.square_mirror(square)]
+        for square in chess.SQUARES
+    )
+    for piece_type in PIECE_TYPES
+}
+BLACK_SCORES = {
+    piece_type: tuple(
+        PIECE_VALUES[piece_type] + TABLES[piece_type][square]
+        for square in chess.SQUARES
+    )
+    for piece_type in PIECE_TYPES
+}
 
-    Args:
-        square: chess.Square (0 = a1 … 63 = h8)
-        color:  chess.WHITE or chess.BLACK
+# Flat lookup arrays indexed by (piece_type * 64 + square).
+# A single tuple index replaces a dict lookup + tuple index per piece,
+# which is measurably faster in CPython's eval loop.
+_WHITE_FLAT = tuple(
+    WHITE_SCORES.get(pt, (0,) * 64)[sq]
+    for pt in range(7)          # 0 is unused, 1-6 are piece types
+    for sq in range(64)
+)
+_BLACK_FLAT = tuple(
+    BLACK_SCORES.get(pt, (0,) * 64)[sq]
+    for pt in range(7)
+    for sq in range(64)
+)
 
-    Returns:
-        Integer index in [0, 63] into the piece-square table.
-    """
-    rank = chess.square_rank(square)   # 0 (rank 1) … 7 (rank 8)
-    file = chess.square_file(square)   # 0 (a-file) … 7 (h-file)
-    if color == chess.WHITE:
-        # Flip vertically: rank 7 (rank 8) becomes row 0 of the table
-        return (7 - rank) * 8 + file
-    else:
-        # No flip needed: rank 0 (rank 1) is already row 0 for Black
-        return rank * 8 + file
+# Pre-bind constants used inside evaluate() to avoid repeated global lookups.
+_WHITE = chess.WHITE
+_BLACK = chess.BLACK
+_PIECE_TYPES = PIECE_TYPES
+_scan_forward = chess.scan_forward
+
 
 def evaluate(board):
     """
@@ -179,32 +199,44 @@ def evaluate(board):
           < 0  Black is ahead
             0  Equal position (or forced draw)
     """
-    # Terminal state checks — return before iterating over pieces
-    if board.is_checkmate():
-        # The side whose turn it is has been mated → they lose
-        return -100000 if board.turn else 100000
-    if board.is_stalemate() or board.is_insufficient_material():
-        return 0   # draw
+    if not any(board.legal_moves):
+        return (-100000 if board.turn else 100000) if board.is_check() else 0
+    if board.is_insufficient_material():
+        return 0
 
     score = 0
-    for square in chess.SQUARES:
-        piece = board.piece_at(square)
-        if piece is None:
-            continue   # empty square — skip
+    pawns = board.pawns
+    knights = board.knights
+    bishops = board.bishops
+    rooks = board.rooks
+    queens = board.queens
+    kings = board.kings
+    white_occ = board.occupied_co[_WHITE]
+    black_occ = board.occupied_co[_BLACK]
+    wf = _WHITE_FLAT
+    bf = _BLACK_FLAT
+    scan = _scan_forward
 
-        # Material value (e.g. 100 for a pawn, 900 for a queen)
-        value = PIECE_VALUES[piece.piece_type]
+    for piece_type in _PIECE_TYPES:
+        offset = piece_type << 6
 
-        # Positional bonus from the piece-square table
-        # (positive = good square, negative = bad square for this piece)
-        index = get_table_index(square, piece.color)
-        positional = TABLES[piece.piece_type][index]
-
-        # Accumulate score: White adds, Black subtracts
-        if piece.color == chess.WHITE:
-            score += value + positional
+        if piece_type == chess.PAWN:
+            mask = pawns
+        elif piece_type == chess.KNIGHT:
+            mask = knights
+        elif piece_type == chess.BISHOP:
+            mask = bishops
+        elif piece_type == chess.ROOK:
+            mask = rooks
+        elif piece_type == chess.QUEEN:
+            mask = queens
         else:
-            score -= value + positional
+            mask = kings
+
+        for sq in scan(mask & white_occ):
+            score += wf[offset + sq]
+        for sq in scan(mask & black_occ):
+            score -= bf[offset + sq]
 
     return score
 

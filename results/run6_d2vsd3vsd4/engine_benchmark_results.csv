@@ -1,0 +1,307 @@
+preset_name,opening_name,agent_color,outcome,score,plies,agent_moves,agent_avg_time_s,agent_avg_nodes,engine_avg_time_s
+ab_d2_ordered,Starting Position,white,loss,0.0,80,40,0.03439979000031599,131.4,0.0
+ab_d2_ordered,Starting Position,black,loss,0.0,95,47,0.0358579744681768,138.70212765957447,0.0
+ab_d2_ordered,Italian Game,white,loss,0.0,38,16,0.0294414250004138,109.0,0.0
+ab_d2_ordered,Italian Game,black,loss,0.0,59,26,0.03596800000027892,143.3846153846154,0.0
+ab_d2_ordered,Queen's Gambit Declined,white,draw,0.5,85,40,0.040326610000283834,151.125,0.0
+ab_d2_ordered,Queen's Gambit Declined,black,draw,0.5,183,88,0.015179843181695933,70.82954545454545,0.0
+ab_d2_ordered,Sicilian Defence (Najdorf),white,loss,0.0,208,99,0.018200267676538623,77.16161616161617,0.0
+ab_d2_ordered,Sicilian Defence (Najdorf),black,win,1.0,92,41,0.03317659756075733,131.65853658536585,0.0
+ab_d2_ordered,French Defence (Advance),white,loss,0.0,90,42,0.03148747619022851,139.38095238095238,0.0
+ab_d2_ordered,French Defence (Advance),black,win,1.0,122,59,0.03965660169490286,147.5084745762712,0.0
+ab_d2_ordered,Caro-Kann Defence,white,loss,0.0,64,29,0.046830768965421536,169.89655172413794,0.0
+ab_d2_ordered,Caro-Kann Defence,black,win,1.0,128,61,0.021805686885064,98.90163934426229,0.0
+ab_d2_ordered,Ruy Lopez (Morphy Defense),white,win,1.0,47,21,0.0355283714286218,118.04761904761905,0.0
+ab_d2_ordered,Ruy Lopez (Morphy Defense),black,loss,0.0,55,24,0.025656137499633285,114.375,0.0
+ab_d2_ordered,Slav Defense,white,loss,0.0,82,39,0.042170317948684664,148.66666666666666,0.0
+ab_d2_ordered,Slav Defense,black,win,1.0,80,38,0.022466121052945567,96.26315789473684,0.0
+ab_d2_ordered,King's Indian Defense,white,loss,0.0,174,85,0.01975949176472461,89.02352941176471,0.0
+ab_d2_ordered,King's Indian Defense,black,loss,0.0,39,17,0.02472214705951902,100.17647058823529,0.0
+ab_d2_ordered,Nimzo-Indian Defense,white,loss,0.0,118,56,0.0230441160711702,103.73214285714286,0.0
+ab_d2_ordered,Nimzo-Indian Defense,black,loss,0.0,47,20,0.02604950499990082,102.85,0.0
+ab_d2_ordered,English Opening (Symmetrical),white,win,1.0,47,22,0.031925163636432524,123.68181818181819,0.0
+ab_d2_ordered,English Opening (Symmetrical),black,loss,0.0,151,73,0.018188095890178523,93.36986301369863,0.0
+ab_d2_ordered,Grunfeld Defense,white,win,1.0,67,31,0.03866510645175661,136.41935483870967,0.0
+ab_d2_ordered,Grunfeld Defense,black,draw,0.5,130,62,0.019900262903261575,89.59677419354838,0.0
+ab_d2_ordered,Reti Opening,white,loss,0.0,42,20,0.04164198000034958,167.6,0.0
+ab_d2_ordered,Reti Opening,black,draw,0.5,66,32,0.030152271875181214,128.625,0.0
+ab_d2_ordered,Alekhine's Defense,white,loss,0.0,44,20,0.04401428499932081,150.8,0.0
+ab_d2_ordered,Alekhine's Defense,black,loss,0.0,169,83,0.027328344578651364,120.97590361445783,0.0
+ab_d2_ordered,Modern Defense,white,loss,0.0,94,46,0.02999426304355122,125.06521739130434,0.0
+ab_d2_ordered,Modern Defense,black,loss,0.0,95,46,0.0258020804345585,96.80434782608695,0.0
+ab_d2_ordered,Pirc Defense,white,win,1.0,61,29,0.03949101379300279,119.37931034482759,0.0
+ab_d2_ordered,Pirc Defense,black,loss,0.0,81,38,0.03229101315752671,118.8157894736842,0.0
+ab_d2_ordered,Scandinavian Defense,white,win,1.0,65,31,0.045532906451802364,157.6451612903226,0.0
+ab_d2_ordered,Scandinavian Defense,black,draw,0.5,122,60,0.022301166666754094,100.56666666666666,0.0
+ab_d2_ordered,Dutch Defense,white,draw,0.5,188,93,0.0197262139785556,88.18279569892474,0.0
+ab_d2_ordered,Dutch Defense,black,draw,0.5,110,54,0.023959474073813505,87.0925925925926,0.0
+ab_d2_ordered,Benoni Defense,white,loss,0.0,86,40,0.028361897499871704,122.275,0.0
+ab_d2_ordered,Benoni Defense,black,win,1.0,68,31,0.02591578387094365,104.51612903225806,0.0
+ab_d2_ordered,Benko Gambit,white,draw,0.5,101,48,0.015760166666571724,85.47916666666667,0.0
+ab_d2_ordered,Benko Gambit,black,draw,0.5,71,32,0.028898506249788625,113.46875,0.0
+ab_d2_ordered,Vienna Game,white,loss,0.0,78,37,0.024443540540429437,96.8108108108108,0.0
+ab_d2_ordered,Vienna Game,black,loss,0.0,95,45,0.035053819999787565,143.9777777777778,0.0
+ab_d2_ordered,Bishop's Opening,white,loss,0.0,134,65,0.0299930338462358,118.44615384615385,0.0
+ab_d2_ordered,Bishop's Opening,black,loss,0.0,63,30,0.030013073332884232,114.56666666666666,0.0
+ab_d2_ordered,Four Knights Game,white,draw,0.5,143,69,0.01539847681124229,76.69565217391305,0.0
+ab_d2_ordered,Four Knights Game,black,loss,0.0,141,68,0.022932419117376625,94.19117647058823,0.0
+ab_d2_ordered,Scotch Game,white,win,1.0,65,30,0.03231386333366875,115.7,0.0
+ab_d2_ordered,Scotch Game,black,loss,0.0,143,69,0.01869609565182,88.78260869565217,0.0
+ab_d2_ordered,Philidor Defense,white,loss,0.0,242,119,0.01717243697496714,74.9327731092437,0.0
+ab_d2_ordered,Philidor Defense,black,draw,0.5,141,68,0.02327794852953957,100.86764705882354,0.0
+ab_d2_ordered,Petrov's Defense,white,loss,0.0,52,23,0.026715339130453725,106.04347826086956,0.0
+ab_d2_ordered,Petrov's Defense,black,loss,0.0,55,24,0.04690147499968589,156.25,0.0
+ab_d2_ordered,Giuoco Piano,white,loss,0.0,56,25,0.04046066399969277,143.56,0.0
+ab_d2_ordered,Giuoco Piano,black,draw,0.5,112,53,0.030458115094109606,115.66037735849056,0.0
+ab_d2_ordered,Two Knights Defense,white,loss,0.0,108,50,0.022020905999597745,96.28,0.0
+ab_d2_ordered,Two Knights Defense,black,loss,0.0,51,21,0.035327704762104464,154.8095238095238,0.0
+ab_d2_ordered,Evan's Gambit,white,loss,0.0,96,44,0.028518495454591175,122.1590909090909,0.0
+ab_d2_ordered,Evan's Gambit,black,win,1.0,56,25,0.033377327999769474,107.44,0.0
+ab_d2_ordered,King's Gambit Accepted,white,win,1.0,63,30,0.031490393333418375,110.93333333333334,0.0
+ab_d2_ordered,King's Gambit Accepted,black,loss,0.0,67,31,0.02701258387124624,118.70967741935483,0.0
+ab_d2_ordered,Danish Gambit,white,loss,0.0,64,29,0.03133024482768037,119.48275862068965,0.0
+ab_d2_ordered,Danish Gambit,black,loss,0.0,165,80,0.029179231250236626,114.9125,0.0
+ab_d2_ordered,Catalan Opening,white,draw,0.5,129,63,0.024273126984178182,93.17460317460318,0.0
+ab_d2_ordered,Catalan Opening,black,loss,0.0,47,21,0.03292515238059596,125.66666666666667,0.0
+ab_d2_ordered,Bogo-Indian Defense,white,loss,0.0,192,93,0.012913568816989565,59.40860215053763,0.0
+ab_d2_ordered,Bogo-Indian Defense,black,loss,0.0,117,55,0.023625350909027145,99.2,0.0
+ab_d2_ordered,Queen's Indian Defense,white,draw,0.5,122,58,0.027041120689757697,110.24137931034483,0.0
+ab_d2_ordered,Queen's Indian Defense,black,draw,0.5,71,32,0.03765780937476393,174.0,0.0
+ab_d2_ordered,Trompowsky Attack,white,draw,0.5,127,63,0.028437155555626044,125.95238095238095,0.0
+ab_d2_ordered,Trompowsky Attack,black,draw,0.5,58,28,0.02653316428573557,115.14285714285714,0.0
+ab_d2_ordered,London System,white,loss,0.0,118,56,0.034398166071241576,163.19642857142858,0.0
+ab_d2_ordered,London System,black,draw,0.5,109,52,0.02777315000009996,103.23076923076923,0.0
+ab_d2_ordered,Colle System,white,loss,0.0,66,30,0.03426162999991599,158.06666666666666,0.0
+ab_d2_ordered,Colle System,black,loss,0.0,63,29,0.040647255172596736,133.9655172413793,0.0
+ab_d2_ordered,Torre Attack,white,loss,0.0,94,45,0.02447205111101438,91.53333333333333,0.0
+ab_d2_ordered,Torre Attack,black,loss,0.0,111,53,0.03369093962293228,138.81132075471697,0.0
+ab_d2_ordered,Richter-Veresov Attack,white,loss,0.0,78,37,0.028413800000094313,119.97297297297297,0.0
+ab_d2_ordered,Richter-Veresov Attack,black,win,1.0,70,33,0.02726689393911687,109.66666666666667,0.0
+ab_d2_ordered,Blackmar-Diemer Gambit,white,draw,0.5,85,42,0.04038237857163213,178.92857142857142,0.0
+ab_d2_ordered,Blackmar-Diemer Gambit,black,win,1.0,56,27,0.028903885185610743,118.92592592592592,0.0
+ab_d2_ordered,Bird's Opening,white,loss,0.0,86,42,0.030976509524147593,135.88095238095238,0.0
+ab_d2_ordered,Bird's Opening,black,loss,0.0,51,25,0.026580735999887112,103.52,0.0
+ab_d2_ordered,Larsen's Opening,white,loss,0.0,154,76,0.016112944736768872,77.39473684210526,0.0
+ab_d2_ordered,Larsen's Opening,black,win,1.0,96,48,0.027490370833750905,123.66666666666667,0.0
+ab_d2_ordered,Sokolsky Opening,white,loss,0.0,148,73,0.022304558904180927,87.0958904109589,0.0
+ab_d2_ordered,Sokolsky Opening,black,loss,0.0,53,26,0.03158175384641464,131.76923076923077,0.0
+ab_d2_ordered,Grob's Attack,white,loss,0.0,44,21,0.02880825238129806,111.9047619047619,0.0
+ab_d2_ordered,Grob's Attack,black,loss,0.0,61,30,0.02751340666751882,132.16666666666666,0.0
+ab_d2_ordered,Clemenz Opening,white,loss,0.0,100,49,0.027867269387459193,109.20408163265306,0.0
+ab_d2_ordered,Clemenz Opening,black,loss,0.0,83,41,0.03593952195137163,132.4878048780488,0.0
+ab_d2_ordered,Amar Opening,white,loss,0.0,106,52,0.02131910961529334,95.11538461538461,0.0
+ab_d2_ordered,Amar Opening,black,loss,0.0,67,33,0.03755324242416519,121.15151515151516,0.0
+ab_d2_ordered,Desprez Opening,white,draw,0.5,98,48,0.026985285416458282,108.10416666666667,0.0
+ab_d2_ordered,Desprez Opening,black,loss,0.0,67,33,0.035960803030651405,148.87878787878788,0.0
+ab_d2_ordered,Tarrasch Defense,white,loss,0.0,34,14,0.0340293714289146,103.28571428571429,0.0
+ab_d2_ordered,Tarrasch Defense,black,loss,0.0,85,39,0.02557338461543296,106.12820512820512,0.0
+ab_d2_ordered,Semi-Slav Defense,white,loss,0.0,86,40,0.02000384499979191,96.475,0.0
+ab_d2_ordered,Semi-Slav Defense,black,loss,0.0,41,17,0.03885501764713862,166.0,0.0
+ab_d2_ordered,QGA (Queen's Gambit Accepted),white,loss,0.0,194,95,0.024049564210489687,100.27368421052631,0.0
+ab_d2_ordered,QGA (Queen's Gambit Accepted),black,loss,0.0,35,15,0.051336620000559684,140.8,0.0
+ab_d2_ordered,Chigorin Defense,white,loss,0.0,66,31,0.04565969354828872,130.5483870967742,0.0
+ab_d2_ordered,Chigorin Defense,black,loss,0.0,77,36,0.02844713333342952,98.88888888888889,0.0
+ab_d3_ordered,Starting Position,white,loss,0.0,152,76,0.15773421842085986,1052.3947368421052,0.0
+ab_d3_ordered,Starting Position,black,loss,0.0,115,57,0.18282751228074184,1205.421052631579,0.0
+ab_d3_ordered,Italian Game,white,loss,0.0,84,39,0.2192520717954045,1287.3076923076924,0.0
+ab_d3_ordered,Italian Game,black,draw,0.5,117,55,0.1683676199996791,1195.4545454545455,0.0
+ab_d3_ordered,Queen's Gambit Declined,white,draw,0.5,117,56,0.1564002696426152,969.5892857142857,0.0
+ab_d3_ordered,Queen's Gambit Declined,black,loss,0.0,117,55,0.1363223163635253,908.1454545454545,0.0
+ab_d3_ordered,Sicilian Defence (Najdorf),white,draw,0.5,99,45,0.2593407155551378,1965.4444444444443,0.0
+ab_d3_ordered,Sicilian Defence (Najdorf),black,win,1.0,116,53,0.12102549433957221,803.9433962264151,0.0
+ab_d3_ordered,French Defence (Advance),white,win,1.0,47,21,0.25624502857144327,2000.4761904761904,0.0
+ab_d3_ordered,French Defence (Advance),black,loss,0.0,85,40,0.18098148999979458,1190.35,0.0
+ab_d3_ordered,Caro-Kann Defence,white,win,1.0,115,55,0.09824825454561506,677.9090909090909,0.0
+ab_d3_ordered,Caro-Kann Defence,black,win,1.0,70,32,0.2280484906248148,1602.9375,0.0
+ab_d3_ordered,Ruy Lopez (Morphy Defense),white,win,1.0,75,35,0.29121391428582555,2110.2571428571428,0.0
+ab_d3_ordered,Ruy Lopez (Morphy Defense),black,win,1.0,62,28,0.2618161749998243,2336.6071428571427,0.0
+ab_d3_ordered,Slav Defense,white,win,1.0,79,38,0.2404244684209851,1691.4473684210527,0.0
+ab_d3_ordered,Slav Defense,black,win,1.0,68,32,0.1971009437503426,1102.625,0.0
+ab_d3_ordered,King's Indian Defense,white,loss,0.0,176,86,0.08068310465120682,527.8372093023256,0.0
+ab_d3_ordered,King's Indian Defense,black,loss,0.0,97,46,0.1416700847823212,884.2826086956521,0.0
+ab_d3_ordered,Nimzo-Indian Defense,white,win,1.0,85,40,0.2306568175002212,1273.85,0.0
+ab_d3_ordered,Nimzo-Indian Defense,black,win,1.0,34,14,0.20494668571440602,1298.142857142857,0.0
+ab_d3_ordered,English Opening (Symmetrical),white,draw,0.5,158,77,0.08428864155802648,591.1818181818181,0.0
+ab_d3_ordered,English Opening (Symmetrical),black,loss,0.0,69,32,0.1794165593753405,1097.4375,0.0
+ab_d3_ordered,Grunfeld Defense,white,loss,0.0,100,47,0.21309001489359441,1381.7659574468084,0.0
+ab_d3_ordered,Grunfeld Defense,black,loss,0.0,141,67,0.08269063432866215,577.4328358208955,0.0
+ab_d3_ordered,Reti Opening,white,draw,0.5,166,82,0.2213077804880879,1381.8536585365853,0.0
+ab_d3_ordered,Reti Opening,black,win,1.0,54,26,0.2827575576919536,1954.2307692307693,0.0
+ab_d3_ordered,Alekhine's Defense,white,win,1.0,75,36,0.2903495583329156,2057.277777777778,0.0
+ab_d3_ordered,Alekhine's Defense,black,win,1.0,136,67,0.27905613134352103,1493.5074626865671,0.0
+ab_d3_ordered,Modern Defense,white,draw,0.5,102,50,0.11822878599989053,816.5,0.0
+ab_d3_ordered,Modern Defense,black,loss,0.0,213,105,0.0845222533332985,498.96190476190475,0.0
+ab_d3_ordered,Pirc Defense,white,draw,0.5,137,67,0.145773746268448,1069.3432835820895,0.0
+ab_d3_ordered,Pirc Defense,black,loss,0.0,73,34,0.1791673500000102,1002.1764705882352,0.0
+ab_d3_ordered,Scandinavian Defense,white,win,1.0,81,39,0.26096781538441205,1467.1538461538462,0.0
+ab_d3_ordered,Scandinavian Defense,black,loss,0.0,137,67,0.13714641641783953,855.4925373134329,0.0
+ab_d3_ordered,Dutch Defense,white,win,1.0,85,42,0.20541855000036385,1358.7857142857142,0.0
+ab_d3_ordered,Dutch Defense,black,loss,0.0,105,51,0.1653019529409243,915.5882352941177,0.0
+ab_d3_ordered,Benoni Defense,white,loss,0.0,266,130,0.08666891999973114,548.2153846153847,0.0
+ab_d3_ordered,Benoni Defense,black,loss,0.0,77,35,0.16257848571414277,987.3142857142857,0.0
+ab_d3_ordered,Benko Gambit,white,win,1.0,117,56,0.19472931071400776,1415.482142857143,0.0
+ab_d3_ordered,Benko Gambit,black,win,1.0,76,35,0.15588864285652693,1099.9714285714285,0.0
+ab_d3_ordered,Vienna Game,white,loss,0.0,64,30,0.2491681533333273,1553.5666666666666,0.0
+ab_d3_ordered,Vienna Game,black,draw,0.5,73,34,0.24265382352988288,1350.1764705882354,0.0
+ab_d3_ordered,Bishop's Opening,white,loss,0.0,78,37,0.21922335405385662,1443.7297297297298,0.0
+ab_d3_ordered,Bishop's Opening,black,win,1.0,100,49,0.2157324775511444,1363.3673469387754,0.0
+ab_d3_ordered,Four Knights Game,white,loss,0.0,72,33,0.2385960090905428,1315.3030303030303,0.0
+ab_d3_ordered,Four Knights Game,black,win,1.0,88,42,0.23528918333362353,1306.0,0.0
+ab_d3_ordered,Scotch Game,white,win,1.0,49,22,0.3129710090906883,2121.0,0.0
+ab_d3_ordered,Scotch Game,black,draw,0.5,125,60,0.16830639000024045,993.5833333333334,0.0
+ab_d3_ordered,Philidor Defense,white,win,1.0,63,30,0.22778660666638947,1896.9,0.0
+ab_d3_ordered,Philidor Defense,black,draw,0.5,81,38,0.1526097947368582,908.8684210526316,0.0
+ab_d3_ordered,Petrov's Defense,white,win,1.0,91,43,0.2335582999999027,1699.0232558139535,0.0
+ab_d3_ordered,Petrov's Defense,black,loss,0.0,61,27,0.2140685666667263,1207.7777777777778,0.0
+ab_d3_ordered,Giuoco Piano,white,loss,0.0,152,73,0.27263651780804266,1523.6301369863013,0.0
+ab_d3_ordered,Giuoco Piano,black,loss,0.0,169,81,0.1323869604938757,767.2716049382716,0.0
+ab_d3_ordered,Two Knights Defense,white,loss,0.0,70,31,0.2596151225806088,1757.5483870967741,0.0
+ab_d3_ordered,Two Knights Defense,black,loss,0.0,117,54,0.07787753333327095,545.8703703703703,0.0
+ab_d3_ordered,Evan's Gambit,white,win,1.0,73,33,0.11575641212105191,902.3030303030303,0.0
+ab_d3_ordered,Evan's Gambit,black,win,1.0,100,47,0.20149839148925433,1663.4468085106382,0.0
+ab_d3_ordered,King's Gambit Accepted,white,draw,0.5,174,85,0.11603675411765033,733.8235294117648,0.0
+ab_d3_ordered,King's Gambit Accepted,black,win,1.0,184,90,0.12395188111125512,798.3888888888889,0.0
+ab_d3_ordered,Danish Gambit,white,draw,0.5,127,61,0.21803546393470033,1270.0983606557377,0.0
+ab_d3_ordered,Danish Gambit,black,draw,0.5,137,66,0.11407295454542195,695.1666666666666,0.0
+ab_d3_ordered,Catalan Opening,white,draw,0.5,134,65,0.13621801384584753,850.6,0.0
+ab_d3_ordered,Catalan Opening,black,loss,0.0,73,34,0.2606225205884531,1572.235294117647,0.0
+ab_d3_ordered,Bogo-Indian Defense,white,loss,0.0,120,57,0.1354626964913909,894.5964912280701,0.0
+ab_d3_ordered,Bogo-Indian Defense,black,loss,0.0,119,56,0.3493542910715795,1985.9285714285713,0.0
+ab_d3_ordered,Queen's Indian Defense,white,loss,0.0,28,11,0.2021392181814008,1034.5454545454545,0.0
+ab_d3_ordered,Queen's Indian Defense,black,loss,0.0,75,34,0.21388392941180961,1257.4117647058824,0.0
+ab_d3_ordered,Trompowsky Attack,white,loss,0.0,88,43,0.22958153488316171,1330.0697674418604,0.0
+ab_d3_ordered,Trompowsky Attack,black,loss,0.0,73,35,0.33732875142855584,1908.0285714285715,0.0
+ab_d3_ordered,London System,white,loss,0.0,82,38,0.19226163684192885,1157.6842105263158,0.0
+ab_d3_ordered,London System,black,draw,0.5,42,19,0.4209619263157564,2337.0,0.0
+ab_d3_ordered,Colle System,white,loss,0.0,96,45,0.19693363555521096,1153.3777777777777,0.0
+ab_d3_ordered,Colle System,black,win,1.0,138,67,0.16261403134346586,960.044776119403,0.0
+ab_d3_ordered,Torre Attack,white,loss,0.0,86,41,0.361266165853566,1956.658536585366,0.0
+ab_d3_ordered,Torre Attack,black,win,1.0,60,28,0.2615803678574074,1877.3214285714287,0.0
+ab_d3_ordered,Richter-Veresov Attack,white,loss,0.0,184,90,0.13352990555589106,802.9,0.0
+ab_d3_ordered,Richter-Veresov Attack,black,loss,0.0,53,24,0.3140614916666588,1769.8333333333333,0.0
+ab_d3_ordered,Blackmar-Diemer Gambit,white,win,1.0,47,23,0.31259805652228784,1845.9130434782608,0.0
+ab_d3_ordered,Blackmar-Diemer Gambit,black,win,1.0,52,25,0.2674656640000467,2352.24,0.0
+ab_d3_ordered,Bird's Opening,white,win,1.0,57,28,0.14882921428553736,1014.7857142857143,0.0
+ab_d3_ordered,Bird's Opening,black,loss,0.0,95,47,0.18445444255353613,1180.6170212765958,0.0
+ab_d3_ordered,Larsen's Opening,white,win,1.0,161,80,0.14177177250003298,916.6125,0.0
+ab_d3_ordered,Larsen's Opening,black,loss,0.0,135,67,0.16092762238818,1039.1940298507463,0.0
+ab_d3_ordered,Sokolsky Opening,white,win,1.0,27,13,0.16806190769281015,865.3846153846154,0.0
+ab_d3_ordered,Sokolsky Opening,black,loss,0.0,95,47,0.22755015531916759,1303.4893617021276,0.0
+ab_d3_ordered,Grob's Attack,white,draw,0.5,119,59,0.13730444237265502,825.9830508474577,0.0
+ab_d3_ordered,Grob's Attack,black,win,1.0,72,36,0.22372361388877632,1736.111111111111,0.0
+ab_d3_ordered,Clemenz Opening,white,loss,0.0,216,107,0.10746254579427382,677.6542056074767,0.0
+ab_d3_ordered,Clemenz Opening,black,loss,0.0,223,111,0.14323967477488425,915.5315315315315,0.0
+ab_d3_ordered,Amar Opening,white,draw,0.5,133,66,0.09758388484855955,588.7878787878788,0.0
+ab_d3_ordered,Amar Opening,black,loss,0.0,121,60,0.13997800333290797,854.6,0.0
+ab_d3_ordered,Desprez Opening,white,win,1.0,19,9,0.22394047777803885,1605.2222222222222,0.0
+ab_d3_ordered,Desprez Opening,black,draw,0.5,150,75,0.20360907600018738,1182.9066666666668,0.0
+ab_d3_ordered,Tarrasch Defense,white,draw,0.5,87,41,0.14706989999991138,1070.341463414634,0.0
+ab_d3_ordered,Tarrasch Defense,black,loss,0.0,129,61,0.12542810000001633,796.5901639344262,0.0
+ab_d3_ordered,Semi-Slav Defense,white,loss,0.0,84,39,0.2764180589747878,1614.3333333333333,0.0
+ab_d3_ordered,Semi-Slav Defense,black,draw,0.5,226,110,0.09400782909106056,635.3363636363637,0.0
+ab_d3_ordered,QGA (Queen's Gambit Accepted),white,win,1.0,53,25,0.25092838800002937,1361.16,0.0
+ab_d3_ordered,QGA (Queen's Gambit Accepted),black,draw,0.5,91,43,0.28093273488377957,1463.6046511627908,0.0
+ab_d3_ordered,Chigorin Defense,white,win,1.0,43,20,0.230182314999729,1849.8,0.0
+ab_d3_ordered,Chigorin Defense,black,loss,0.0,57,26,0.21870258076901686,1390.4615384615386,0.0
+ab_d4_ordered,Starting Position,white,win,1.0,79,40,1.332553472499967,4634.8,0.0
+ab_d4_ordered,Starting Position,black,draw,0.5,116,58,0.9904552896548858,4505.741379310345,0.0
+ab_d4_ordered,Italian Game,white,win,1.0,69,32,1.573068837499818,7557.90625,0.0
+ab_d4_ordered,Italian Game,black,win,1.0,36,15,1.88548305999963,6581.533333333334,0.0
+ab_d4_ordered,Queen's Gambit Declined,white,loss,0.0,94,44,2.408100843181687,8750.59090909091,0.0
+ab_d4_ordered,Queen's Gambit Declined,black,win,1.0,172,83,0.8729561746990675,3731.7710843373493,0.0
+ab_d4_ordered,Sicilian Defence (Najdorf),white,loss,0.0,166,78,0.9588061512816543,4269.846153846154,0.0
+ab_d4_ordered,Sicilian Defence (Najdorf),black,win,1.0,48,19,2.952857031579027,9778.736842105263,0.0
+ab_d4_ordered,French Defence (Advance),white,draw,0.5,152,73,0.900962164383575,3582.5479452054797,0.0
+ab_d4_ordered,French Defence (Advance),black,draw,0.5,192,94,0.7667901999998418,3508.8936170212764,0.0
+ab_d4_ordered,Caro-Kann Defence,white,loss,0.0,202,98,0.9032887020407079,3904.0714285714284,0.0
+ab_d4_ordered,Caro-Kann Defence,black,win,1.0,48,21,2.4771170571428747,8552.095238095239,0.0
+ab_d4_ordered,Ruy Lopez (Morphy Defense),white,win,1.0,79,37,1.2912542351349092,4995.945945945946,0.0
+ab_d4_ordered,Ruy Lopez (Morphy Defense),black,win,1.0,56,25,0.8824556799994024,3458.04,0.0
+ab_d4_ordered,Slav Defense,white,win,1.0,55,26,1.2313507807687598,4298.923076923077,0.0
+ab_d4_ordered,Slav Defense,black,draw,0.5,108,52,0.9660646846155382,3398.0576923076924,0.0
+ab_d4_ordered,King's Indian Defense,white,win,1.0,83,40,1.8841495499998018,6301.45,0.0
+ab_d4_ordered,King's Indian Defense,black,win,1.0,86,41,2.1385599829268247,7560.292682926829,0.0
+ab_d4_ordered,Nimzo-Indian Defense,white,win,1.0,115,55,1.5069109254550395,5429.654545454546,0.0
+ab_d4_ordered,Nimzo-Indian Defense,black,win,1.0,98,46,1.6680818891309173,6951.804347826087,0.0
+ab_d4_ordered,English Opening (Symmetrical),white,win,1.0,73,35,1.1546411942858998,4292.114285714286,0.0
+ab_d4_ordered,English Opening (Symmetrical),black,loss,0.0,159,77,0.9842929142855551,4585.181818181818,0.0
+ab_d4_ordered,Grunfeld Defense,white,win,1.0,47,21,1.6379681047624868,5115.571428571428,0.0
+ab_d4_ordered,Grunfeld Defense,black,draw,0.5,90,42,1.063152419047453,4140.452380952381,0.0
+ab_d4_ordered,Reti Opening,white,win,1.0,113,56,2.1960408196428034,7948.125,0.0
+ab_d4_ordered,Reti Opening,black,loss,0.0,143,70,0.8830127857139555,3627.657142857143,0.0
+ab_d4_ordered,Alekhine's Defense,white,win,1.0,53,25,2.7554317319997064,9441.28,0.0
+ab_d4_ordered,Alekhine's Defense,black,loss,0.0,139,68,0.7791424117648442,3827.3529411764707,0.0
+ab_d4_ordered,Modern Defense,white,loss,0.0,128,63,1.0573242857145877,4423.6349206349205,0.0
+ab_d4_ordered,Modern Defense,black,win,1.0,42,20,1.3516324449999957,5062.7,0.0
+ab_d4_ordered,Pirc Defense,white,win,1.0,57,27,1.4409692518521398,5448.62962962963,0.0
+ab_d4_ordered,Pirc Defense,black,win,1.0,106,51,1.8199813137257213,7094.450980392156,0.0
+ab_d4_ordered,Scandinavian Defense,white,draw,0.5,73,35,1.7469514514288416,7321.4857142857145,0.0
+ab_d4_ordered,Scandinavian Defense,black,win,1.0,62,30,0.8552209099998436,4141.733333333334,0.0
+ab_d4_ordered,Dutch Defense,white,draw,0.5,129,64,1.6533992296872384,6714.453125,0.0
+ab_d4_ordered,Dutch Defense,black,loss,0.0,75,36,0.9227829694445973,4711.888888888889,0.0
+ab_d4_ordered,Benoni Defense,white,win,1.0,83,39,1.192006441025744,4916.666666666667,0.0
+ab_d4_ordered,Benoni Defense,black,win,1.0,102,48,0.9527552250006011,3900.4583333333335,0.0
+ab_d4_ordered,Benko Gambit,white,win,1.0,47,21,2.298725066666867,7706.190476190476,0.0
+ab_d4_ordered,Benko Gambit,black,win,1.0,104,49,1.3759031857143225,5879.0,0.0
+ab_d4_ordered,Vienna Game,white,win,1.0,75,36,1.8285146027776338,6772.75,0.0
+ab_d4_ordered,Vienna Game,black,win,1.0,54,25,1.4577443719997245,5427.08,0.0
+ab_d4_ordered,Bishop's Opening,white,win,1.0,61,29,1.8908815517243056,7281.517241379311,0.0
+ab_d4_ordered,Bishop's Opening,black,win,1.0,74,36,1.13594105833282,5443.194444444444,0.0
+ab_d4_ordered,Four Knights Game,white,loss,0.0,156,75,1.1843170373331426,5080.1466666666665,0.0
+ab_d4_ordered,Four Knights Game,black,loss,0.0,47,21,1.7630961523808808,7511.190476190476,0.0
+ab_d4_ordered,Scotch Game,white,win,1.0,35,15,1.1515551799995591,3904.5333333333333,0.0
+ab_d4_ordered,Scotch Game,black,win,1.0,88,42,1.0686792571428843,3385.5476190476193,0.0
+ab_d4_ordered,Philidor Defense,white,win,1.0,59,28,1.3122209892858987,4729.678571428572,0.0
+ab_d4_ordered,Philidor Defense,black,draw,0.5,176,86,0.6569154883720838,3445.313953488372,0.0
+ab_d4_ordered,Petrov's Defense,white,win,1.0,65,30,1.3904155833336214,5130.266666666666,0.0
+ab_d4_ordered,Petrov's Defense,black,win,1.0,66,30,1.505028213332965,5967.033333333334,0.0
+ab_d4_ordered,Giuoco Piano,white,loss,0.0,116,55,0.9229473709092417,3695.181818181818,0.0
+ab_d4_ordered,Giuoco Piano,black,draw,0.5,76,35,1.0477696657145446,3804.0857142857144,0.0
+ab_d4_ordered,Two Knights Defense,white,win,1.0,41,17,1.5470651823531678,5437.294117647059,0.0
+ab_d4_ordered,Two Knights Defense,black,loss,0.0,69,30,1.0685563066668693,5929.133333333333,0.0
+ab_d4_ordered,Evan's Gambit,white,win,1.0,45,19,0.853685910526493,3960.0526315789475,0.0
+ab_d4_ordered,Evan's Gambit,black,win,1.0,62,28,1.89597448571424,7359.821428571428,0.0
+ab_d4_ordered,King's Gambit Accepted,white,draw,0.5,91,44,0.7968073340906069,3726.3636363636365,0.0
+ab_d4_ordered,King's Gambit Accepted,black,win,1.0,50,23,2.4173284956516947,8247.217391304348,0.0
+ab_d4_ordered,Danish Gambit,white,win,1.0,89,42,1.146452878571186,4054.690476190476,0.0
+ab_d4_ordered,Danish Gambit,black,win,1.0,62,29,1.5944436344828412,6471.6551724137935,0.0
+ab_d4_ordered,Catalan Opening,white,draw,0.5,91,44,1.5565524545449576,6065.636363636364,0.0
+ab_d4_ordered,Catalan Opening,black,win,1.0,58,27,2.411901151851554,8517.62962962963,0.0
+ab_d4_ordered,Bogo-Indian Defense,white,loss,0.0,100,47,2.6071944234045463,10070.553191489362,0.0
+ab_d4_ordered,Bogo-Indian Defense,black,win,1.0,54,24,1.1726998666663349,4607.666666666667,0.0
+ab_d4_ordered,Queen's Indian Defense,white,win,1.0,57,26,3.1770974346151117,8541.153846153846,0.0
+ab_d4_ordered,Queen's Indian Defense,black,win,1.0,134,64,1.6159679546876191,5994.46875,0.0
+ab_d4_ordered,Trompowsky Attack,white,win,1.0,115,57,2.0612125894737816,6552.456140350877,0.0
+ab_d4_ordered,Trompowsky Attack,black,win,1.0,52,25,1.5962464199999522,4838.96,0.0
+ab_d4_ordered,London System,white,win,1.0,41,18,3.661874061111424,9137.222222222223,0.0
+ab_d4_ordered,London System,black,loss,0.0,117,56,1.5374903607145955,6045.625,0.0
+ab_d4_ordered,Colle System,white,win,1.0,69,32,1.9213433968749314,5912.53125,0.0
+ab_d4_ordered,Colle System,black,win,1.0,76,36,2.401953208333705,7731.222222222223,0.0
+ab_d4_ordered,Torre Attack,white,draw,0.5,29,13,1.24242555384654,4117.076923076923,0.0
+ab_d4_ordered,Torre Attack,black,win,1.0,40,18,1.9508671222219063,6339.611111111111,0.0
+ab_d4_ordered,Richter-Veresov Attack,white,win,1.0,73,35,1.1910333942858935,4020.9714285714285,0.0
+ab_d4_ordered,Richter-Veresov Attack,black,win,1.0,64,30,2.84305770000016,9267.466666666667,0.0
+ab_d4_ordered,Blackmar-Diemer Gambit,white,win,1.0,99,49,1.565532089795796,5501.163265306122,0.0
+ab_d4_ordered,Blackmar-Diemer Gambit,black,loss,0.0,105,51,1.4500089490198553,6257.3725490196075,0.0
+ab_d4_ordered,Bird's Opening,white,win,1.0,87,43,1.58447726976763,6285.581395348837,0.0
+ab_d4_ordered,Bird's Opening,black,win,1.0,50,25,1.7627416039996024,5323.24,0.0
+ab_d4_ordered,Larsen's Opening,white,win,1.0,65,32,1.2149360187504499,4891.40625,0.0
+ab_d4_ordered,Larsen's Opening,black,win,1.0,140,70,1.307433917142771,5400.042857142857,0.0
+ab_d4_ordered,Sokolsky Opening,white,win,1.0,115,57,1.0461024245616914,4253.736842105263,0.0
+ab_d4_ordered,Sokolsky Opening,black,win,1.0,76,38,2.4395879157892573,9980.763157894737,0.0
+ab_d4_ordered,Grob's Attack,white,draw,0.5,60,29,1.1448320999996464,4039.137931034483,0.0
+ab_d4_ordered,Grob's Attack,black,win,1.0,84,42,0.868548671428514,3806.714285714286,0.0
+ab_d4_ordered,Clemenz Opening,white,loss,0.0,166,82,0.9916212121951081,4396.621951219512,0.0
+ab_d4_ordered,Clemenz Opening,black,win,1.0,70,35,0.9780754371428754,3745.7428571428572,0.0
+ab_d4_ordered,Amar Opening,white,win,1.0,97,48,1.3430325937500431,5123.625,0.0
+ab_d4_ordered,Amar Opening,black,win,1.0,106,53,1.0953598094337789,5172.11320754717,0.0
+ab_d4_ordered,Desprez Opening,white,win,1.0,105,52,1.424584563461674,6377.115384615385,0.0
+ab_d4_ordered,Desprez Opening,black,win,1.0,86,43,0.952427367442037,3564.3720930232557,0.0
+ab_d4_ordered,Tarrasch Defense,white,win,1.0,105,50,1.0499184660002356,4936.4,0.0
+ab_d4_ordered,Tarrasch Defense,black,win,1.0,46,20,1.238601149999886,4390.75,0.0
+ab_d4_ordered,Semi-Slav Defense,white,win,1.0,61,28,1.754398985714683,6516.571428571428,0.0
+ab_d4_ordered,Semi-Slav Defense,black,draw,0.5,115,54,0.8955302018518894,4839.814814814815,0.0
+ab_d4_ordered,QGA (Queen's Gambit Accepted),white,win,1.0,97,47,1.2056755574466227,5594.191489361702,0.0
+ab_d4_ordered,QGA (Queen's Gambit Accepted),black,win,1.0,64,30,1.4976353566665541,7390.566666666667,0.0
+ab_d4_ordered,Chigorin Defense,white,win,1.0,33,15,1.462506420001349,5233.866666666667,0.0
+ab_d4_ordered,Chigorin Defense,black,win,1.0,188,92,0.40771744673925836,2452.945652173913,0.0

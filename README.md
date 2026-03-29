@@ -1,52 +1,122 @@
 # Chess AI — Minimax with Alpha-Beta Pruning
 
-A playable chess game where you face an AI that uses the **Minimax** algorithm with **Alpha-Beta pruning**.
+CS6053 Artificial Intelligence and Machine Learning coursework.
+
+A chess agent that uses **Minimax** (blind search baseline) and **Minimax with Alpha-Beta pruning** (informed search) to select moves. The agent is benchmarked both internally (efficiency) and externally against Stockfish (playing strength).
 
 ## Requirements
 
-- Python 3.10 or higher
-
-Install all dependencies with:
+Python 3.10 or higher. Install dependencies:
 
 ```bash
 pip install pygame-ce python-chess matplotlib
 ```
 
-**Note:** Use `pygame-ce` (the community edition), not the original `pygame`. The original does not support Python 3.12+.
-
-## How to Run
-
-### Play the game
-```bash
-python gui.py
-```
-1. Choose to play as **White** or **Black**.
-2. Choose a difficulty:
-   - Easy — depth 1 (fast, weak)
-   - Medium — depth 3 (balanced)
-   - Hard — depth 5 (strong, slower)
-3. Click a piece to select it, then click the destination square to move.
-
-### Run the benchmark
-```bash
-python benchmark.py
-```
-Compares pure Minimax vs Alpha-Beta pruning across depths 1–4.
-Prints a results table and saves a chart as `benchmark_results.png`.
-
 ## Project Structure
 
 ```
-├── gui.py           # Menu screens (colour + difficulty selection)
-├── game.py          # Board rendering and game loop
-├── search.py        # Minimax + Alpha-Beta search algorithm
-├── evaluation.py    # Heuristic board evaluation function
-├── benchmark.py     # Performance comparison script
-└── icons/           # Piece PNG images (must be present to run the game)
+agent/
+  search.py         # Minimax and Alpha-Beta search algorithms
+  evaluation.py     # Heuristic board evaluation (material + piece-square tables)
+
+config/
+  settings.py       # All benchmark parameters — edit this before running
+  openings.py       # 50 curated opening positions (FENs) used in benchmarks
+
+benchmarks/
+  vs_stockfish.py   # Entry point: CLI and main() orchestration
+  models.py         # Shared dataclasses (AgentPreset, GameRecord)
+  game.py           # Single-game logic (play_game, opening suite)
+  worker.py         # Multiprocessing pool, engine discovery and validation
+  reporting.py      # Terminal output, CSV, and plot generation
+  internal.py       # Efficiency comparison: Minimax vs Alpha-Beta (nodes, time)
+
+stockfish/          # Create this folder locally and place the Stockfish executable here
 ```
+
+## Stockfish Setup
+
+The repository does **not** include the Stockfish engine.
+
+To run the external engine benchmark:
+
+1. Download Stockfish from: `https://stockfishchess.org/download/` (This repository uses stockfish 18)
+2. Extract the contents of the downloaded zip.
+3. Place the stockfish/ folder inside this project's root folder.
+
+The benchmark script auto-discovers `stockfish/stockfish*.exe`. You can also provide the executable path manually with `--engine-path`.
+
+## Configuration
+
+All parameters are in [config/settings.py](config/settings.py). Edit this file before running benchmarks:
+
+```python
+AGENT_CONFIGS = [
+    ("mm_d2",          2, False, False),   # pure Minimax, depth 2
+    ("ab_d2",          2, True,  False),   # Alpha-Beta, depth 2
+    ("ab_d3",          3, True,  False),   # Alpha-Beta, depth 3
+    ("ab_d3_ordered",  3, True,  True),    # Alpha-Beta, depth 3 + move ordering
+]
+
+ENGINE_ELO   = 1000   # Stockfish Elo limit
+ENGINE_TIME  = 0.05   # seconds per engine move
+NUM_OPENINGS = 6      # opening positions to test
+```
+
+## Running the Benchmarks
+
+### Internal benchmark (Minimax vs Alpha-Beta efficiency)
+
+```bash
+python benchmarks/internal.py
+```
+
+Compares pure Minimax vs Alpha-Beta pruning across depths 1–4. Prints a results table and saves a chart as `internal_benchmark.png`.
+
+### Stockfish benchmark (agent strength)
+
+```bash
+python benchmarks/vs_stockfish.py
+```
+
+The script auto-discovers `stockfish/stockfish*.exe`. To specify the path manually:
+
+```bash
+python benchmarks/vs_stockfish.py --engine-path "C:\path\to\stockfish.exe"
+```
+
+Outputs:
+- Terminal summary table (W/D/L, score %, avg nodes, avg time per config)
+- `engine_benchmark_summary.png` — bar charts for score, nodes, and time
+- `engine_benchmark_results.csv` — full per-game results
+
+All defaults come from `config/settings.py`. CLI flags override them when needed (see `--help`).
 
 ## How the AI Works
 
-1. **Minimax** — the AI builds a game tree to a fixed depth, assuming both players always play their best move. White maximises the score; Black minimises it.
-2. **Alpha-Beta pruning** — skips branches that cannot affect the final decision, dramatically reducing the nodes searched without changing the result.
-3. **Evaluation function** — when the depth limit is reached, the board is scored using piece material values plus piece-square tables that reward good positioning.
+1. **Problem formulation** — Chess is modelled as a state space search problem. Each board position is a state; legal moves are transitions; the goal is to reach a winning terminal state.
+
+2. **Minimax** — The AI builds a game tree to a fixed depth, assuming both players always play their best move. White maximises the score; Black minimises it.
+
+3. **Alpha-Beta pruning** — Skips branches that cannot affect the final decision, dramatically reducing nodes searched without changing the chosen move.
+
+4. **Move ordering** — An enhancement to Alpha-Beta that sorts moves before searching them (promotions, captures, checks first). Alpha-Beta prunes most aggressively when it sees the best moves first, so good ordering can reduce nodes searched further without changing the result.
+
+5. **Evaluation function** — At the depth limit, the board is scored using piece material values plus piece-square tables that reward good positioning. This heuristic is what makes the search *informed* rather than blind.
+
+## Original Contributions
+
+| File | Description |
+|------|-------------|
+| `agent/search.py` | Minimax and Alpha-Beta implementation, `SearchConfig` dataclass |
+| `agent/evaluation.py` | Heuristic evaluation with piece-square tables |
+| `config/settings.py` | Centralised benchmark configuration |
+| `config/openings.py` | Curated opening position suite |
+| `benchmarks/internal.py` | Efficiency comparison benchmark |
+| `benchmarks/vs_stockfish.py` | External engine benchmark entry point (CLI + orchestration) |
+| `benchmarks/models.py` | Shared dataclasses used across the benchmark |
+| `benchmarks/game.py` | Single-game play logic and opening suite builder |
+| `benchmarks/worker.py` | Parallel game execution via multiprocessing pool |
+| `benchmarks/reporting.py` | Results output: terminal tables, CSV, and plots |
+
+The `python-chess` library is used for board representation, move generation, and UCI engine communication.

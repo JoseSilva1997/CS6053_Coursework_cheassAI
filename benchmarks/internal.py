@@ -1,6 +1,6 @@
 """
-benchmark.py
-------------
+internal.py
+-----------
 Performance comparison: pure Minimax vs Minimax with Alpha-Beta Pruning.
 
 WHY BENCHMARK?
@@ -14,34 +14,42 @@ that is chosen.  This script verifies both claims:
 THREE TEST POSITIONS are used to average out position-specific variation:
   - Starting position (symmetric, many legal moves)
   - Italian Opening after 4 moves (typical early middlegame)
-  - A richer middlegame with both sides castled
+  - Queen's Gambit Declined (rich pawn structure)
 
-DEPTHS 1-4 are tested.  Depth 5 is omitted for pure Minimax because its
-exponential growth (~35^5 ≈ 52 million nodes) would take too long.
+Depths to test and output file are controlled by config/settings.py.
 
 OUTPUT
 ------
   - Table printed to the terminal: depth, nodes, times, same move?
-  - benchmark_results.png: two side-by-side plots
+  - PNG chart (path set in settings.py): two side-by-side plots
       Left:  bar chart — nodes explored at each depth
       Right: line chart — time per move at each depth
+
+Usage:
+    python benchmarks/internal.py
 """
+import sys
+from pathlib import Path
+
+# Allow imports from the repo root when running this script directly.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import chess
 import matplotlib.pyplot as plt
-from search import get_best_move, get_best_move_no_pruning
+
+from agent.search import get_best_move, get_best_move_no_pruning
+from config.openings import OPENING_POSITIONS
+from config.settings import INTERNAL_DEPTHS, INTERNAL_PLOT_OUTPUT
 
 # ---------------------------------------------------------------------------
-# Test positions (FEN strings)
+# Test positions
 # Three positions give a more representative average than a single position.
 # ---------------------------------------------------------------------------
 POSITIONS = [
-    chess.Board(),                                                                          # starting position
-    chess.Board("r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"), # Italian opening
-    chess.Board("r3k2r/ppp2ppp/2nqbn2/3pp3/3PP3/2NQBN2/PPP2PPP/R3K2R w KQkq - 0 1"),    # mid-game
+    chess.Board(),                            # starting position
+    chess.Board(OPENING_POSITIONS[0][1]),     # Italian Game
+    chess.Board(OPENING_POSITIONS[1][1]),     # Queen's Gambit Declined
 ]
-
-# Search depths to test (depth 5 excluded for pure Minimax — too slow)
-DEPTHS = [1, 2, 3, 4]
 
 # Accumulators for plot data
 mm_nodes  = []   # average nodes explored by pure Minimax
@@ -49,16 +57,15 @@ ab_nodes  = []   # average nodes explored by Alpha-Beta
 mm_times  = []   # average time (seconds) for Minimax
 ab_times  = []   # average time (seconds) for Alpha-Beta
 
-# Print table header
 print(f"{'Depth':<8} {'Minimax Nodes':<18} {'AlphaBeta Nodes':<18} {'MM Time(s)':<14} {'AB Time(s)':<12} {'Same Move?'}")
 print("-" * 82)
 
-for depth in DEPTHS:
+for depth in INTERNAL_DEPTHS:
     total_mm_nodes = 0
     total_ab_nodes = 0
     total_mm_time  = 0
     total_ab_time  = 0
-    all_same = True   # will be set to False if the two algorithms disagree on any position
+    all_same = True   # set to False if the two algorithms disagree on any position
 
     for board in POSITIONS:
         b = board.copy()   # copy so we don't modify the test position
@@ -98,26 +105,24 @@ for depth in DEPTHS:
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
 # Left plot: bar chart comparing nodes explored
-# A much shorter Alpha-Beta bar shows how many nodes pruning eliminated.
-ax1.bar([d - 0.2 for d in DEPTHS], mm_nodes, width=0.4, label="Minimax",    color="steelblue")
-ax1.bar([d + 0.2 for d in DEPTHS], ab_nodes, width=0.4, label="Alpha-Beta", color="darkorange")
+ax1.bar([d - 0.2 for d in INTERNAL_DEPTHS], mm_nodes, width=0.4, label="Minimax",    color="steelblue")
+ax1.bar([d + 0.2 for d in INTERNAL_DEPTHS], ab_nodes, width=0.4, label="Alpha-Beta", color="darkorange")
 ax1.set_xlabel("Search Depth")
 ax1.set_ylabel("Nodes Explored (avg)")
 ax1.set_title("Nodes Explored: Minimax vs Alpha-Beta")
-ax1.set_xticks(DEPTHS)
+ax1.set_xticks(INTERNAL_DEPTHS)
 ax1.legend()
 
 # Right plot: line chart comparing wall-clock time per move
-# Shows how the time advantage of Alpha-Beta grows with depth.
-ax2.plot(DEPTHS, mm_times, marker='o', label="Minimax",    color="steelblue")
-ax2.plot(DEPTHS, ab_times, marker='o', label="Alpha-Beta", color="darkorange")
+ax2.plot(INTERNAL_DEPTHS, mm_times, marker='o', label="Minimax",    color="steelblue")
+ax2.plot(INTERNAL_DEPTHS, ab_times, marker='o', label="Alpha-Beta", color="darkorange")
 ax2.set_xlabel("Search Depth")
 ax2.set_ylabel("Time per Move (s, avg)")
 ax2.set_title("Time per Move: Minimax vs Alpha-Beta")
-ax2.set_xticks(DEPTHS)
+ax2.set_xticks(INTERNAL_DEPTHS)
 ax2.legend()
 
 plt.tight_layout()
-plt.savefig("benchmark_results.png", dpi=150)
+plt.savefig(INTERNAL_PLOT_OUTPUT, dpi=150)
 plt.show()
-print("\nPlot saved as benchmark_results.png")
+print(f"\nPlot saved as {INTERNAL_PLOT_OUTPUT}")
