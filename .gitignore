@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 benchmark_results.png
+stockfish/
+engine_benchmark_summary.png
+engine_benchmark_results.csv

@@ -31,8 +31,20 @@ benchmarks/
   reporting.py      # Terminal output, CSV, and plot generation
   internal.py       # Efficiency comparison: Minimax vs Alpha-Beta (nodes, time)
 
-stockfish/          # Place the Stockfish executable here
+stockfish/          # Create this folder locally and place the Stockfish executable here
 ```
+
+## Stockfish Setup
+
+The repository does **not** include the Stockfish engine.
+
+To run the external engine benchmark:
+
+1. Download Stockfish from: `https://stockfishchess.org/download/` (This repository uses stockfish 18)
+2. Extract the contents of the downloaded zip.
+3. Place the stockfish/ folder inside this project's root folder.
+
+The benchmark script auto-discovers `stockfish/stockfish*.exe`. You can also provide the executable path manually with `--engine-path`.
 
 ## Configuration
 
