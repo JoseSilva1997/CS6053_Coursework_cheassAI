@@ -69,7 +69,7 @@ import matplotlib.pyplot as plt
 
 from agent.search import search_position, SearchConfig
 from config.openings import OPENING_POSITIONS
-from config.settings import INTERNAL_DEPTHS, INTERNAL_NUM_OPENINGS, INTERNAL_PLOT_OUTPUT, MAX_WORKERS
+from config.settings import INTERNAL_DEPTHS, INTERNAL_NUM_OPENINGS, INTERNAL_PLOT_OUTPUT, INTERNAL_MAX_WORKERS
 
 
 # ---------------------------------------------------------------------------
@@ -112,8 +112,8 @@ def _aggregate(raw_results, depths):
         d: dict(
             mm_nodes=[], ab_nodes=[], mo_nodes=[],
             mm_times=[], ab_times=[], mo_times=[],
+            mm_scores=[], ab_scores=[], mo_scores=[],
             ab_same_move=[], mo_same_move=[],
-            ab_same_score=[], mo_same_score=[],
         )
         for d in depths
     }
@@ -126,10 +126,11 @@ def _aggregate(raw_results, depths):
         r['mm_times'].append(mm.elapsed_seconds)
         r['ab_times'].append(ab.elapsed_seconds)
         r['mo_times'].append(mo.elapsed_seconds)
-        r['ab_same_move'].append(mm.move  == ab.move)
-        r['mo_same_move'].append(mm.move  == mo.move)
-        r['ab_same_score'].append(mm.score == ab.score)
-        r['mo_same_score'].append(mm.score == mo.score)
+        r['mm_scores'].append(mm.score)
+        r['ab_scores'].append(ab.score)
+        r['mo_scores'].append(mo.score)
+        r['ab_same_move'].append(mm.move == ab.move)
+        r['mo_same_move'].append(mm.move == mo.move)
 
     return by_depth
 
@@ -207,11 +208,11 @@ def _print_time_table(by_depth, depths):
 
 def _print_agreement_table(by_depth, depths):
     n = len(by_depth[depths[0]]['ab_same_move'])
-    title = f"Table 2 — Move & Score Agreement vs Pure Minimax  (n = {n} positions per depth)"
+    title = f"Table 2 — Correctness vs Pure Minimax  (n = {n} positions per depth)"
     hdr = (
         f"{'Depth':<7}"
-        f"{'AB Same Move%':>16}{'AB Same Score%':>16}"
-        f"{'MO Same Move%':>16}{'MO Same Score%':>16}"
+        f"{'MM Avg Score':>14}{'AB Avg Score':>14}{'AB Same Move%':>15}"
+        f"{'MO Avg Score':>14}{'MO Same Move%':>15}"
     )
     sep = "=" * len(hdr)
     print(f"\n{title}")
@@ -221,15 +222,22 @@ def _print_agreement_table(by_depth, depths):
 
     for d in depths:
         r = by_depth[d]
+        n = len(r['mm_scores'])
+        mm_sc_avg = sum(r['mm_scores']) / n
+        ab_sc_avg = sum(r['ab_scores']) / n
+        mo_sc_avg = sum(r['mo_scores']) / n
         ab_mv = _pct(r['ab_same_move'])
-        ab_sc = _pct(r['ab_same_score'])
         mo_mv = _pct(r['mo_same_move'])
-        mo_sc = _pct(r['mo_same_score'])
-        print(f"{d:<7}{ab_mv:>15.1f}%{ab_sc:>15.1f}%{mo_mv:>15.1f}%{mo_sc:>15.1f}%")
+        print(
+            f"{d:<7}"
+            f"{mm_sc_avg:>14.1f}{ab_sc_avg:>14.1f}{ab_mv:>14.1f}%"
+            f"{mo_sc_avg:>14.1f}{mo_mv:>14.1f}%"
+        )
 
     print(
-        "\n  Note: 'Same Score' tests algorithmic correctness (should be 100% for all variants)."
-        "\n        'Same Move'  may be <100% for AB+MO due to tie-breaking when two moves share"
+        "\n  Note: Avg Score is the mean minimax evaluation (centipawns) across all positions."
+        "\n        Identical values across algorithms confirm they compute the same minimax value."
+        "\n        Same Move % may be <100% for AB+MO due to tie-breaking when two moves share"
         "\n        the same minimax value — this is expected behaviour, not a correctness failure."
     )
 
@@ -263,10 +271,10 @@ def _bar_group(ax, x_vals, series, title, ylabel, log_scale=False):
 
 
 def _plot(by_depth, depths, output_path):
-    fig, ((ax_avg, ax_med), (ax_time, ax_agree)) = plt.subplots(2, 2, figsize=(14, 10))
+    fig, (ax_avg, ax_med, ax_time) = plt.subplots(1, 3, figsize=(18, 5))
     x = list(depths)
 
-    # Top-left: average nodes (log scale)
+    # Left: average nodes (log scale)
     _bar_group(
         ax_avg, x,
         series=[
@@ -279,7 +287,7 @@ def _plot(by_depth, depths, output_path):
         log_scale=True,
     )
 
-    # Top-right: median nodes (log scale)
+    # Centre: median nodes (log scale)
     _bar_group(
         ax_med, x,
         series=[
@@ -292,7 +300,7 @@ def _plot(by_depth, depths, output_path):
         log_scale=True,
     )
 
-    # Bottom-left: average search time
+    # Right: average search time
     for vals, label, color in zip(
         [
             [sum(by_depth[d]['mm_times']) / len(by_depth[d]['mm_times']) for d in depths],
@@ -307,22 +315,6 @@ def _plot(by_depth, depths, output_path):
     ax_time.set_title("Average Search Time per Move")
     ax_time.set_xticks(x)
     ax_time.legend()
-
-    # Bottom-right: move/score agreement %
-    agree_lines = [
-        ([_pct(by_depth[d]['ab_same_move'])  for d in depths], "AB same move",   "darkorange", "-",  "o", 1.0),
-        ([_pct(by_depth[d]['ab_same_score']) for d in depths], "AB same score",  "darkorange", "--", "s", 0.6),
-        ([_pct(by_depth[d]['mo_same_move'])  for d in depths], "MO same move",   "seagreen",   "-",  "o", 1.0),
-        ([_pct(by_depth[d]['mo_same_score']) for d in depths], "MO same score",  "seagreen",   "--", "s", 0.6),
-    ]
-    for vals, label, color, ls, marker, alpha in agree_lines:
-        ax_agree.plot(x, vals, marker=marker, linestyle=ls, label=label, color=color, alpha=alpha)
-    ax_agree.set_xlabel("Search Depth")
-    ax_agree.set_ylabel("Agreement with Minimax (%)")
-    ax_agree.set_title("Move & Score Agreement vs Pure Minimax")
-    ax_agree.set_xticks(x)
-    ax_agree.set_ylim(0, 105)
-    ax_agree.legend()
 
     plt.tight_layout()
     fig.savefig(output_path, dpi=150)
@@ -372,7 +364,7 @@ def main():
         )
     ]
     total = len(tasks)
-    num_workers = min(MAX_WORKERS or os.cpu_count() or 1, total)
+    num_workers = min(INTERNAL_MAX_WORKERS or os.cpu_count() or 1, total)
 
     print("Internal benchmark: Minimax vs Alpha-Beta vs AB + Move Ordering")
     print(f"Positions : {n_pos}  |  Depths: {INTERNAL_DEPTHS}  |  Total tasks: {total}  |  Workers: {num_workers}")
