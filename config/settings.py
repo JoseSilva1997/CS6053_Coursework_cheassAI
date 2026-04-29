@@ -11,8 +11,28 @@ Format per entry: (name, depth, use_alpha_beta, move_ordering)
 """
 
 # ---------------------------------------------------------------------------
+# Internal benchmark (Minimax vs Alpha-Beta vs AB + Move Ordering)
+# ---------------------------------------------------------------------------
+INTERNAL_DEPTHS = [2, 3, 4, 5]          # depth 5 excluded — pure Minimax is too slow
+INTERNAL_NUM_OPENINGS = 50              # number of opening positions to use (max 50)
+INTERNAL_MAX_WORKERS = None             # max parallel worker processes for internal benchmark (None = all CPU cores)
+INTERNAL_PLOT_OUTPUT = "internal_benchmark.png"
+
+# ---------------------------------------------------------------------------
+# Stockfish benchmark (agent strength vs external engine)
+# ---------------------------------------------------------------------------
+MAX_WORKERS      = None         # max parallel worker processes for vs_stockfish (None = all CPU cores)
+ENGINE_ELO       = 1500         # target Elo for Stockfish — minimum supported by this build is 1320
+ENGINE_TIME      = 0.05         # seconds per engine move
+NUM_OPENINGS     = 5           # number of opening positions to test (from config/openings.py)
+MAX_PLIES        = 500          # truncate game after this many half-moves (avoids infinite draws)
+VS_ENGINE_CSV    = "engine_benchmark_results.csv"
+VS_ENGINE_PLOT   = "engine_benchmark_summary.png"
+
+# ---------------------------------------------------------------------------
 # Agent configurations
 # Each entry defines one version of the AI agent to test.
+# This only controls vs_stockfish.py.
 # ---------------------------------------------------------------------------
 AGENT_CONFIGS = [
     # name              depth  alpha_beta  move_ordering
@@ -21,26 +41,9 @@ AGENT_CONFIGS = [
     ("ab_d2_ordered",   2,     True,       True),    # Alpha-Beta, depth 2 + move ordering
     # ("mm_d3",           3,     False,      False),   # pure Minimax, depth 3
     # ("ab_d3",           3,     True,       False),   # Alpha-Beta, depth 3
-    # ("ab_d3_ordered",   3,     True,       True),    # Alpha-Beta, depth 3 + move ordering
+    ("ab_d3_ordered",   3,     True,       True),    # Alpha-Beta, depth 3 + move ordering
     # ("mm_d4",           4,     False,      False),   # pure Minimax, depth 4
     # ("ab_d4",           4,     True,       False),   # Alpha-Beta, depth 4
-    # ("ab_d4_ordered",   4,     True,       True),   # Alpha-Beta, depth 4 + move ordering
-    # ("ab_d5_ordered",   5,     True,       True),   # Alpha-Beta, depth 5 + move ordering (Minimax at depth 5 is too slow for practical testing)
+    ("ab_d4_ordered",   4,     True,       True),   # Alpha-Beta, depth 4 + move ordering
+    ("ab_d5_ordered",   5,     True,       True),   # Alpha-Beta, depth 5 + move ordering (Minimax at depth 5 is too slow for practical testing)
 ]
-
-# ---------------------------------------------------------------------------
-# Internal benchmark (Minimax vs Alpha-Beta efficiency comparison)
-# ---------------------------------------------------------------------------
-INTERNAL_DEPTHS = [1, 2, 3, 4]          # depth 5 excluded — pure Minimax is too slow
-INTERNAL_PLOT_OUTPUT = "internal_benchmark.png"
-
-# ---------------------------------------------------------------------------
-# Stockfish benchmark (agent strength vs external engine)
-# ---------------------------------------------------------------------------
-MAX_WORKERS      = None         # max parallel worker processes for vs_stockfish (None = all CPU cores)
-ENGINE_ELO       = 1320         # target Elo for Stockfish — minimum supported by this build is 1320
-ENGINE_TIME      = 0.05         # seconds per engine move
-NUM_OPENINGS     = 205           # number of opening positions to test (from config/openings.py)
-MAX_PLIES        = 500          # truncate game after this many half-moves (avoids infinite draws)
-VS_ENGINE_CSV    = "engine_benchmark_results.csv"
-VS_ENGINE_PLOT   = "engine_benchmark_summary.png"
